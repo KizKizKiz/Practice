@@ -10,20 +10,21 @@ namespace Task_1
     {
         static void Main(string[] args)
         {
-            List<Animal> animals = new List<Animal>()
+            var animals = new List<Animal>()
             {
-                new Insect(5,true),                
+                new Insect(5,true),
                 new Butterfly("Red",5.5F)
                 {
                     Name = "Bloom",
                     Age = 5,
+                    Feet = 2,
                     IsDangerous = false
                 },
                 new Spider(false, true)
                 {
                     Name = "Peter Parker",
                     Age = 19,
-                    HasPoison = false, 
+                    HasPoison = false,
                     IsDangerous = true,
                     IsRare = true,
                     Feet = 4
@@ -32,8 +33,8 @@ namespace Task_1
 
             foreach (var animal in animals) {
                 Console.WriteLine(animal.ToString());
-            }            
-
+            }     
+            
             Console.ReadKey();
 
         }

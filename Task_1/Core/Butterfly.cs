@@ -8,11 +8,11 @@ namespace Task_1.Core
 {
     public class Butterfly:Insect
     {
-        private String _color;
-
-        private float _wingsArea;
-
-        public String Color
+        private string _color;
+        /// <summary>
+        /// Получает/задает цвет крыльев бабочки
+        /// </summary>
+        public string Color
         {
             get { return _color; }
             set
@@ -23,7 +23,11 @@ namespace Task_1.Core
                 _color = value;
             }
         }
-            
+
+        private float _wingsArea;
+        /// <summary>
+        /// Получает/задает площадь крыльев бабочки
+        /// </summary>      
         public float WingsArea
         {
             get { return _wingsArea; }
@@ -35,27 +39,32 @@ namespace Task_1.Core
                 _wingsArea = value;
             }
         }
-
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="Butterfly"/> с полями, выставленными в значение по умолчанию
+        /// </summary>
         public Butterfly():
             this("White", default(float))
         {            
         }
-
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="Butterfly"/> с указанными значениями полей
+        /// </summary>
+        /// <param name="color">Цвет крыльев бабочки</param>
+        /// <param name="wingsArea">Площадь крыльев бабочки</param>
         public Butterfly(string color, float wingsArea) 
             :base()
         {
             Color = color;
             WingsArea = wingsArea;
         }
-
+        /// <summary>
+        /// Представляет информацию об объекте <see cref="Butterfly"/>
+        /// </summary>        
         public override string ToString()
         {
-            return string.Format($"Type:{GetType().Name}" +
-                $"\n\tName:{this.Name}" +
-                $"\n\tAge:{this.Age}" +
-                $"\n\tCount of feet:{this.Feet}" +
-                $"\n\tColor:{this.Color}" +
-                $"\n\tWings area:{this.WingsArea}");
+            return $"{base.ToString()}" +
+                $"\n\tColor:{Color}" +
+                $"\n\tWings area:{WingsArea}";
         }
     }
 }
