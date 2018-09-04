@@ -63,5 +63,7 @@ namespace Task_1.Core
             return $"Name:{Name}" +
                    $"\n\tAge:{Age}";
         }
+
+        ///Некоторое изменение
     }
 }
