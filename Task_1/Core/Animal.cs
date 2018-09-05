@@ -1,13 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Task_1.Core
 {
+    /// <summary>
+    /// Отряды животных
+    /// </summary>
+    public enum SQUAD
+    {
+        spiders,
+        lepidoptera
+    }
     public class Animal
     {        
+        /// <summary>
+        /// Отряд животного
+        /// </summary>
+        public SQUAD Squad { get; set; }
+
         private int _age;
         /// <summary>
         /// Получает/задает имя животного
@@ -22,8 +33,7 @@ namespace Task_1.Core
                 }
                 _age = value;
             }
-        }
-        
+        }        
         private string _name;
         /// <summary>
         /// Получает/задает возраст животного        
@@ -61,9 +71,20 @@ namespace Task_1.Core
         public override string ToString()
         {
             return $"Name:{Name}" +
-                   $"\n\tAge:{Age}";
+                   $"\n\tAge:{Age}"+
+                   $"\n\tSquad:{Squad}";
         }
-
-        ///Некоторое изменение
+        /// <summary>
+        /// Инициализирует поля объекта <see cref="Animal"/>
+        /// </summary>
+        /// <param name="reader">Объект-инициализатор</param>
+        public virtual void Serialize(SqlDataReader reader)
+        {
+            if (Enum.IsDefined(typeof(SQUAD), reader["_squad"])) {
+                Squad = (SQUAD)Enum.Parse(typeof(SQUAD), reader["_squad"].ToString());
+            }                        
+            Name = reader["_name"].ToString();
+            Age = Convert.ToInt32(reader["_age"]);
+        }
     }
 }

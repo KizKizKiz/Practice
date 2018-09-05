@@ -1,42 +1,67 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
 
 using Task_1.Core;
-
 namespace Task_1
 {
     class Program
-    {
+    {                
+        static List<Animal> animals;
+
         static void Main(string[] args)
         {
-            var animals = new List<Animal>()
+            animals = new List<Animal>();
+            try 
             {
-                new Insect(5,true),
-                new Butterfly("Red",5.5F)
-                {
-                    Name = "Bloom",
-                    Age = 5,
-                    Feet = 2,
-                    IsDangerous = false
-                },
-                new Spider(false, true)
-                {
-                    Name = "Peter Parker",
-                    Age = 19,
-                    HasPoison = false,
-                    IsDangerous = true,
-                    IsRare = true,
-                    Feet = 4
+                using (var connection = new SqlConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"])) {
+                    connection.Open();
+                    var command = new SqlCommand("SELECT * FROM Animals", connection);
+                    using (var reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            var animal = RecordParse(reader);
+                            if (animal!=null) {
+                                animal.Serialize(reader);                            
+                                animals.Add(animal);                                                          
+                            }       
+                        }
+                    }                    
                 }
-            };
-
-            foreach (var animal in animals) {
-                Console.WriteLine(animal.ToString());
-            }     
+                foreach (var animal in animals) {
+                    Console.WriteLine(animal);
+                }
+            }
+            catch (SqlException e) {
+                Console.WriteLine($"Source:{e.Source}" +
+                    $"\nMessage:{e.Message}");                   
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.StackTrace);
+            }
             
             Console.ReadKey();
 
+        }
+        /// <summary>
+        /// Преобразует запись объекта <see cref="SqlDataReader"/> в эквивалентный объект <see cref="Animal"/>
+        /// </summary>
+        /// <param name="reader">Объект, содержащий запись</param>        
+        static Animal RecordParse(SqlDataReader reader)
+        {
+            Animal animal = null;            
+            switch (reader["_squad"].ToString()) {
+                case "spiders": {
+                    animal = new Spider();
+                    break;
+                }
+                case "lepidoptera": {
+                    animal = new Butterfly();
+                    break;
+                }
+            }
+            return animal;
         }
     }
 }

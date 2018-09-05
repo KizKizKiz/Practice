@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
+
 
 namespace Task_1.Core
 {
@@ -49,9 +48,19 @@ namespace Task_1.Core
         /// </summary>   
         public override string ToString()
         {
-            return $"{base.ToString()}" +
+            return base.ToString() +
                 $"\n\tHas poison:{HasPoison}" +
                 $"\n\tIs rare:{IsRare}";
+        }
+        /// <summary>
+        /// Инициализирует поля объекта <see cref="Spider"/>
+        /// </summary>
+        /// <param name="reader">Объект-инициализатор</param>
+        public override void Serialize(SqlDataReader reader)
+        {
+            base.Serialize(reader);
+            HasPoison = Convert.ToBoolean(reader["_hasPoison"]);
+            IsRare = Convert.ToBoolean(reader["_isRare"]);
         }
     }
 }

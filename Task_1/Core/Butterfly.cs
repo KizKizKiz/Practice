@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
+
 
 namespace Task_1.Core
 {
@@ -62,9 +61,19 @@ namespace Task_1.Core
         /// </summary>        
         public override string ToString()
         {
-            return $"{base.ToString()}" +
+            return base.ToString()+
                 $"\n\tColor:{Color}" +
                 $"\n\tWings area:{WingsArea}";
+        }
+        /// <summary>
+        /// Инициализирует поля объекта <see cref="Butterfly"/>
+        /// </summary>
+        /// <param name="reader">Объект-инициализатор</param>
+        public override void Serialize(SqlDataReader reader)
+        {
+            base.Serialize(reader);
+            Color = reader["_color"].ToString();
+            WingsArea = Convert.ToSingle(reader["_wingsArea"]);            
         }
     }
 }
