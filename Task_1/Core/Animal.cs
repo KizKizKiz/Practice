@@ -1,13 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Task_1.Core
 {
     public class Animal
-    {        
+    {
+        private string _squad;
+        /// <summary>
+        /// Получает/задает отряд животного
+        /// </summary>
+        public string Squad
+        {
+            get { return _squad; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new ArgumentException("Squad cannot be null or has white space");
+                }
+            }
+        }
         private int _age;
         /// <summary>
         /// Получает/задает имя животного
@@ -22,8 +34,7 @@ namespace Task_1.Core
                 }
                 _age = value;
             }
-        }
-        
+        }        
         private string _name;
         /// <summary>
         /// Получает/задает возраст животного        
@@ -61,9 +72,18 @@ namespace Task_1.Core
         public override string ToString()
         {
             return $"Name:{Name}" +
-                   $"\n\tAge:{Age}";
+                   $"\n\tAge:{Age}"+
+                   $"\n\tSquad:{Squad}";
         }
-
-        ///Некоторое изменение
+        /// <summary>
+        /// Инициализирует поля объекта <see cref="Animal"/>
+        /// </summary>
+        /// <param name="reader">Объект-инициализатор</param>
+        public virtual void Serialize(SqlDataReader reader)
+        {
+            Squad = reader.GetString(1);
+            Name = reader.GetString(2);
+            Age = reader.GetInt32(3);
+        }
     }
 }

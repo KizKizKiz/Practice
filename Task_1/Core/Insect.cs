@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Task_1.Core
 {
@@ -50,9 +48,19 @@ namespace Task_1.Core
         /// </summary>   
         public override string ToString()
         {
-            return $"{base.ToString()}"+
+            return base.ToString() +
                    $"\n\tFeet:{Feet}" +
                    $"\n\tIs dangerous:{IsDangerous}";
+        }
+        /// <summary>
+        /// Инициализирует поля объекта <see cref="Insect"/>
+        /// </summary>
+        /// <param name="reader">Объект-инициализатор</param>
+        public override void Serialize(SqlDataReader reader)
+        {
+            base.Serialize(reader);
+            Feet = reader.GetInt32(4);
+            IsDangerous = reader.GetBoolean(5);
         }
     }
 }
