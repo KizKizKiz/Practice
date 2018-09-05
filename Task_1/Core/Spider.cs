@@ -59,8 +59,8 @@ namespace Task_1.Core
         public override void Serialize(SqlDataReader reader)
         {
             base.Serialize(reader);
-            HasPoison = reader.GetBoolean(6);
-            IsRare = reader.GetBoolean(7);
+            HasPoison = Convert.ToBoolean(reader["_hasPoison"]);
+            IsRare = Convert.ToBoolean(reader["_isRare"]);
         }
     }
 }

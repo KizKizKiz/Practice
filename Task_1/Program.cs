@@ -14,7 +14,8 @@ namespace Task_1
         static void Main(string[] args)
         {
             animals = new List<Animal>();
-            try {
+            try 
+            {
                 using (var connection = new SqlConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"])) {
                     connection.Open();
                     var command = new SqlCommand("SELECT * FROM Animals", connection);
@@ -35,7 +36,10 @@ namespace Task_1
             catch (SqlException e) {
                 Console.WriteLine($"Source:{e.Source}" +
                     $"\nMessage:{e.Message}");                   
-            }         
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.StackTrace);
+            }
             
             Console.ReadKey();
 
@@ -43,11 +47,11 @@ namespace Task_1
         /// <summary>
         /// Преобразует запись объекта <see cref="SqlDataReader"/> в эквивалентный объект <see cref="Animal"/>
         /// </summary>
-        /// <param name="reader">Объект, содержащий запись</param>
+        /// <param name="reader">Объект, содержащий запись</param>        
         static Animal RecordParse(SqlDataReader reader)
         {
-            Animal animal = null;
-            switch (reader.GetValue(1).ToString()) {
+            Animal animal = null;            
+            switch (reader["_squad"].ToString()) {
                 case "spiders": {
                     animal = new Spider();
                     break;
@@ -55,8 +59,8 @@ namespace Task_1
                 case "lepidoptera": {
                     animal = new Butterfly();
                     break;
-                }                
-            }            
+                }
+            }
             return animal;
         }
     }

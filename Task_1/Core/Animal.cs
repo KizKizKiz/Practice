@@ -4,22 +4,21 @@ using System.Data.SqlClient;
 
 namespace Task_1.Core
 {
-    public class Animal
+    /// <summary>
+    /// Отряды животных
+    /// </summary>
+    public enum SQUAD
     {
-        private string _squad;
+        spiders,
+        lepidoptera
+    }
+    public class Animal
+    {        
         /// <summary>
-        /// Получает/задает отряд животного
+        /// Отряд животного
         /// </summary>
-        public string Squad
-        {
-            get { return _squad; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value)) {
-                    throw new ArgumentException("Squad cannot be null or has white space");
-                }
-            }
-        }
+        public SQUAD Squad { get; set; }
+
         private int _age;
         /// <summary>
         /// Получает/задает имя животного
@@ -81,9 +80,11 @@ namespace Task_1.Core
         /// <param name="reader">Объект-инициализатор</param>
         public virtual void Serialize(SqlDataReader reader)
         {
-            Squad = reader.GetString(1);
-            Name = reader.GetString(2);
-            Age = reader.GetInt32(3);
+            if (Enum.IsDefined(typeof(SQUAD), reader["_squad"])) {
+                Squad = (SQUAD)Enum.Parse(typeof(SQUAD), reader["_squad"].ToString());
+            }                        
+            Name = reader["_name"].ToString();
+            Age = Convert.ToInt32(reader["_age"]);
         }
     }
 }

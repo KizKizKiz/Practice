@@ -59,8 +59,8 @@ namespace Task_1.Core
         public override void Serialize(SqlDataReader reader)
         {
             base.Serialize(reader);
-            Feet = reader.GetInt32(4);
-            IsDangerous = reader.GetBoolean(5);
+            Feet = Convert.ToInt32(reader["_countOfFeet"]);
+            IsDangerous = Convert.ToBoolean(reader["_isDangerous"]);
         }
     }
 }
