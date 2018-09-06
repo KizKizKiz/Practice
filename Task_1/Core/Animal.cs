@@ -9,8 +9,8 @@ namespace Task_1.Core
     /// </summary>
     public enum SQUAD
     {
-        spiders,
-        lepidoptera
+        spiders = 1,
+        lepidoptera = 2
     }
     public class Animal
     {        
@@ -80,11 +80,9 @@ namespace Task_1.Core
         /// <param name="reader">Объект-инициализатор</param>
         public virtual void Serialize(SqlDataReader reader)
         {
-            if (Enum.IsDefined(typeof(SQUAD), reader["_squad"])) {
-                Squad = (SQUAD)Enum.Parse(typeof(SQUAD), reader["_squad"].ToString());
-            }                        
-            Name = reader["_name"].ToString();
-            Age = Convert.ToInt32(reader["_age"]);
+            Squad = (SQUAD) reader["Squad"];
+            Name = reader["Name"].ToString();
+            Age = Convert.ToInt32(reader["Age"]);
         }
     }
 }
