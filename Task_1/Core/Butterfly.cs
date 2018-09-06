@@ -72,8 +72,8 @@ namespace Task_1.Core
         public override void Serialize(SqlDataReader reader)
         {
             base.Serialize(reader);
-            Color = reader["_color"].ToString();
-            WingsArea = Convert.ToSingle(reader["_wingsArea"]);            
+            Color = reader["Color"].ToString();
+            WingsArea = Convert.ToSingle(reader["Wings area"]);            
         }
     }
 }

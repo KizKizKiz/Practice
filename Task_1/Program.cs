@@ -50,13 +50,13 @@ namespace Task_1
         /// <param name="reader">Объект, содержащий запись</param>        
         static Animal RecordParse(SqlDataReader reader)
         {
-            Animal animal = null;            
-            switch (reader["_squad"].ToString()) {
-                case "spiders": {
+            Animal animal = null;
+            switch (reader["Squad"]) {
+                case 1: {
                     animal = new Spider();
                     break;
                 }
-                case "lepidoptera": {
+                case 2: {
                     animal = new Butterfly();
                     break;
                 }
