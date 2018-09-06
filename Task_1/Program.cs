@@ -51,12 +51,12 @@ namespace Task_1
         static Animal RecordParse(SqlDataReader reader)
         {
             Animal animal = null;
-            switch (reader["Squad"]) {
-                case 1: {
+            switch ((SQUAD)reader["Squad"]) {
+                case SQUAD.spiders: {
                     animal = new Spider();
                     break;
                 }
-                case 2: {
+                case SQUAD.lepidoptera: {
                     animal = new Butterfly();
                     break;
                 }

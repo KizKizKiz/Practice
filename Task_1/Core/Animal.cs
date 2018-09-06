@@ -80,7 +80,7 @@ namespace Task_1.Core
         /// <param name="reader">Объект-инициализатор</param>
         public virtual void Serialize(SqlDataReader reader)
         {
-            Squad = (SQUAD) Enum.Parse(typeof(SQUAD), reader["Squad"].ToString());
+            Squad = (SQUAD) reader["Squad"];
             Name = reader["Name"].ToString();
             Age = Convert.ToInt32(reader["Age"]);
         }
