@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 using Task_1.Core;
+using Task_1.DAL;
 namespace Task_1
 {
     class Program
@@ -13,22 +14,12 @@ namespace Task_1
 
         static void Main(string[] args)
         {
-            animals = new List<Animal>();
+            AnimalDAL<Spider> dAL = null;
             try 
             {
-                using (var connection = new SqlConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"])) {
-                    connection.Open();
-                    var command = new SqlCommand("SELECT * FROM Animals", connection);
-                    using (var reader = command.ExecuteReader()) {
-                        while (reader.Read()) {
-                            var animal = RecordParse(reader);
-                            if (animal!=null) {
-                                animal.Serialize(reader);                            
-                                animals.Add(animal);                                                          
-                            }       
-                        }
-                    }                    
-                }
+                dAL = new AnimalDAL<Spider>();
+                dAL.OpenConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"]);
+                var animals = dAL.Load("Select * from Animals");
                 foreach (var animal in animals) {
                     Console.WriteLine(animal);
                 }
@@ -40,28 +31,12 @@ namespace Task_1
             catch (Exception e) {
                 Console.WriteLine(e.StackTrace);
             }
-            
+            finally {
+                dAL.CloseConnection();
+            }
             Console.ReadKey();
 
         }
-        /// <summary>
-        /// Преобразует запись объекта <see cref="SqlDataReader"/> в эквивалентный объект <see cref="Animal"/>
-        /// </summary>
-        /// <param name="reader">Объект, содержащий запись</param>        
-        static Animal RecordParse(SqlDataReader reader)
-        {
-            Animal animal = null;
-            switch ((SQUAD)reader["Squad"]) {
-                case SQUAD.spiders: {
-                    animal = new Spider();
-                    break;
-                }
-                case SQUAD.lepidoptera: {
-                    animal = new Butterfly();
-                    break;
-                }
-            }
-            return animal;
-        }
+
     }
 }
