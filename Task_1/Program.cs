@@ -10,17 +10,16 @@ namespace Task_1
 {
     class Program
     {                
-        static List<Animal> animals;
-
         static void Main(string[] args)
         {
             Essential typeEssential = null;
+            SqlConnection connection =null;
             try 
             {               
                 typeEssential = new Essential();
 
-                typeEssential.OpenConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"]);
-                var data = typeEssential.Load("Select * from Animals");
+                connection = typeEssential.OpenConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"]);
+                var data = typeEssential.Load("Select * from Animals", connection);
                                 
                 foreach (var element in data) {
                     Console.WriteLine(element);
@@ -34,7 +33,7 @@ namespace Task_1
                 Console.WriteLine(e.StackTrace);
             }
             finally {
-                typeEssential.CloseConnection();
+                typeEssential.CloseConnection(connection);
             }
             Console.ReadKey();
 

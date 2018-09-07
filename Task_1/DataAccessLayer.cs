@@ -6,38 +6,36 @@ using System.Data.SqlClient;
 using Task_1.Core;
 namespace Task_1
 {
-    class DataAccess<T>
-    {
-        private SqlConnection _connection;
-        private SqlCommand _command;
+    abstract class DataAccess<T>
+    {        
         /// <summary>
         /// Открывает соединение с БД
         /// </summary>
-        public void OpenConnection(string strConn)
+        public SqlConnection OpenConnection(string strConn)
         {
-            _connection = new SqlConnection(strConn);
-            _command = new SqlCommand(null, _connection);
+            SqlConnection _connection = new SqlConnection(strConn);
+            SqlCommand _command = new SqlCommand(null, _connection);
             _connection.Open();
+            return _connection;
         }
         /// <summary>
         /// Закрывает соединение с БД
         /// </summary>
-        public void CloseConnection()
+        public void CloseConnection(SqlConnection connection)
         {
-            if (_connection.State != ConnectionState.Closed) {
-                _connection.Close();
+            if (connection.State != ConnectionState.Closed) {
+                connection.Close();
             }
         }
         /// <summary>
         /// Возвращает коллекцию типа <see cref="T"/>, наполненную объектами из БД
         /// </summary>
         /// <param name="sql"></param>        
-        public List<T> Load(string sql)
+        public List<T> Load(string sql, SqlConnection connection)
         {
             var data = new List<T>();
-
-            _command.CommandText = sql;
-            using (var reader = _command.ExecuteReader()) {
+            SqlCommand command = new SqlCommand(sql, connection);            
+            using (var reader = command.ExecuteReader()) {
                 while (reader.Read()) {     
                     
                     var element = Serialize(reader);
@@ -45,11 +43,8 @@ namespace Task_1
                 }
             }
             return data;
-        }           
-
-        protected virtual T Serialize(SqlDataReader reader)
-        {
-            return default(T);
         }
+
+        protected abstract T Serialize(SqlDataReader reader);        
     }
 }
