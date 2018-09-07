@@ -51,16 +51,6 @@ namespace Task_1.Core
             return base.ToString() +
                 $"\n\tHas poison:{HasPoison}" +
                 $"\n\tIs rare:{IsRare}";
-        }
-        /// <summary>
-        /// Инициализирует поля объекта <see cref="Spider"/>
-        /// </summary>
-        /// <param name="reader">Объект-инициализатор</param>
-        public override void Serialize(SqlDataReader reader)
-        {
-            base.Serialize(reader);
-            HasPoison = Convert.ToBoolean(reader["Has poison"]);
-            IsRare = Convert.ToBoolean(reader["Is rare"]);
-        }
+        }        
     }
 }

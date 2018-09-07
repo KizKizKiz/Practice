@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 using Task_1.Core;
-using Task_1.DAL;
+
 namespace Task_1
 {
     class Program
@@ -14,14 +14,16 @@ namespace Task_1
 
         static void Main(string[] args)
         {
-            AnimalDAL<Spider> dAL = null;
+            Essential typeEssential = null;
             try 
-            {
-                dAL = new AnimalDAL<Spider>();
-                dAL.OpenConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"]);
-                var animals = dAL.Load("Select * from Animals");
-                foreach (var animal in animals) {
-                    Console.WriteLine(animal);
+            {               
+                typeEssential = new Essential();
+
+                typeEssential.OpenConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"]);
+                var data = typeEssential.Load("Select * from Animals");
+                                
+                foreach (var element in data) {
+                    Console.WriteLine(element);
                 }
             }
             catch (SqlException e) {
@@ -32,7 +34,7 @@ namespace Task_1
                 Console.WriteLine(e.StackTrace);
             }
             finally {
-                dAL.CloseConnection();
+                typeEssential.CloseConnection();
             }
             Console.ReadKey();
 

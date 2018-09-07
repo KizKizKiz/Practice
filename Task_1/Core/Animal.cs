@@ -74,15 +74,6 @@ namespace Task_1.Core
                    $"\n\tAge:{Age}"+
                    $"\n\tSquad:{Squad}";
         }
-        /// <summary>
-        /// Инициализирует поля объекта <see cref="Animal"/>
-        /// </summary>
-        /// <param name="reader">Объект-инициализатор</param>
-        public virtual void Serialize(SqlDataReader reader)
-        {
-            Squad = (SQUAD) reader["Squad"];
-            Name = reader["Name"].ToString();
-            Age = Convert.ToInt32(reader["Age"]);
-        }
+       
     }
 }
