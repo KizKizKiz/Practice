@@ -7,31 +7,17 @@ namespace Task_1
     class Essential : CachedData<Animal>
     {
         /// <summary>
-        /// Инициализирует сущность типа <see cref="Essential"/>
+        /// Имя таблицы, из которой происходит выборка данных
+        /// </summary>        
+        public override string Table { get; }
+        /// <summary>
+        /// Инициализация сущности типа <see cref="Essential"/>
         /// </summary>
         /// <param name="table">Имя таблицы</param>
         public Essential(string table)
         {
-            Table = table;
+            _table = table;
         }
-        /// <summary>
-        /// Имя таблицы, из которой происходит выборка данных
-        /// </summary>
-        public override string Table
-        {
-            get
-            {
-                return _table;
-            }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value)) {
-                    throw new ArgumentException("Table name cannot be null or empty");
-                }
-                _table = value;
-            }
-        }
-
         /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
         /// </summary>

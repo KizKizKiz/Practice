@@ -12,7 +12,7 @@ namespace Task_1
         /// <summary>
         /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
-        public abstract string Table { get; set; }        
+        public abstract string Table { get; }        
         /// <summary>
         /// Кэшированные данные
         /// </summary>
