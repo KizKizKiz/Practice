@@ -6,11 +6,7 @@ using System.Data.SqlClient;
 namespace Task_1
 {
     abstract class DataAccess<T>
-    {
-        /// <summary>
-        /// Кэшированные данные
-        /// </summary>
-        protected List<T> _cachedData;
+    {                
         private string _connectionString;
         /// <summary>
         /// Строка подключения к БД
@@ -75,10 +71,14 @@ namespace Task_1
             finally {
                 CloseConnection(connection);
             }
-            _cachedData = new List<T>(data);
+            InitCacheData(data);
             return data;
         }
-
+        /// <summary>
+        /// Инициализация кэшированных данных типа <see cref="T"/>
+        /// </summary>
+        /// <param name="collection">Коллекция объектов инициализации</param>
+        protected abstract void InitCacheData(IEnumerable<T> collection);
         protected abstract T Serialize(SqlDataReader reader);
     }
 }

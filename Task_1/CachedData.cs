@@ -8,19 +8,24 @@ namespace Task_1
     abstract class CachedData<T> : DataAccess<T> where T : IKey
     {
         /// <summary>
-        /// Возвращает кэшированный элемент типа <see cref="T"/>. Если элемент на найден
+        /// Кэшированные данные
+        /// </summary>
+        protected Dictionary<int, T> _cachedData;
+        /// <summary>
+        /// Возвращает кэшированный элемент типа <see cref="T"/> из таблицы. Если элемент на найден
         /// в коллекции, он загружается из БД и кэшируется
         /// </summary>        
         /// <param name="id">Идентификатор объекта</param>
-        public T LoadById(int id)
+        /// <param name="table">Наименование таблицы</param>
+        public T LoadById(int id, string table)
         {
-            T element = _cachedData.Where((data => data.Id == id)).
-                                   FirstOrDefault();
+            T element = _cachedData.Keys.Contains(id) ?
+                        _cachedData[id] : default(T);                                    
             if (element == null) {
-                element = Load($"SELECT * FROM ANIMALS WHERE ID={id}").
+                element = Load($"SELECT * FROM {table} WHERE ID={id}").
                           FirstOrDefault();
                 if (element != null) {
-                    _cachedData.Add(element);
+                    _cachedData.Add(id, element);
                 }
             }
             return element;
@@ -35,7 +40,20 @@ namespace Task_1
             if (match == null) {
                 throw new NullReferenceException();
             }
-            return _cachedData.FindAll(match);
+            return _cachedData.Values.
+                               ToList().
+                               FindAll(match);
+        }
+        /// <summary>
+        /// Инициализация кэшированных данных типа <see cref="T"/>
+        /// </summary>
+        /// <param name="collection">Коллекция объектов инициализации</param>
+        protected override void InitCacheData(IEnumerable<T> collection)
+        {
+            _cachedData = new Dictionary<int, T>();
+            foreach (var element in collection) {                
+                _cachedData.Add(element.Id, element);
+            }
         }
         protected abstract override T Serialize(SqlDataReader reader);
     }

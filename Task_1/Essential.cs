@@ -25,7 +25,8 @@ namespace Task_1
                 }
                 default:
                 break;
-            }            
+            }
+            animal.Id = Convert.ToInt32(reader["ID"]);
             return animal;
         }
         /// <summary>

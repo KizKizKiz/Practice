@@ -20,7 +20,8 @@ namespace Task_1
                 collection = new Essential();
                 collection.ConnectionString = strConn;
                 var data = collection.Load("SELECT * FROM ANIMALS");
-                                
+
+                Console.WriteLine(collection.LoadById(9, "Animals"));
                 foreach (var element in data) {
                     Console.WriteLine(element);
                 }
