@@ -19,10 +19,10 @@ namespace Task_1
 
                 collection = new Essential();
                 collection.ConnectionString = strConn;
-                var data = collection.Load("SELECT * FROM ANIMALS");
-
-                Console.WriteLine(collection.LoadById(9, "Animals"));
-                foreach (var element in data) {
+                collection.Table = "Animals";
+                Console.WriteLine(collection.LoadById(9));
+                var animals = collection.LoadFromCacheByLinq((animal) => animal.Age > 5);
+                foreach (var element in animals) {
                     Console.WriteLine(element);
                 }
             }

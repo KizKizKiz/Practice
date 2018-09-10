@@ -8,14 +8,6 @@ namespace Task_1
     class TypeEssential:DataAccess<SQUAD>
     {       
         /// <summary>
-        /// Инициализация кэшированных данных типа <see cref="SQUAD"/>
-        /// </summary>
-        /// <param name="collection">Коллекция объектов инициализации</param>
-        protected override void InitCacheData(IEnumerable<SQUAD> collection)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
         /// Возвращает объект типа <see cref="SQUAD"/>
         /// </summary>
         /// <param name="reader">Объект чтения</param>

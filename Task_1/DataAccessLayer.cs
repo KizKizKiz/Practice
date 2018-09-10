@@ -70,15 +70,9 @@ namespace Task_1
             }
             finally {
                 CloseConnection(connection);
-            }
-            InitCacheData(data);
+            }            
             return data;
-        }
-        /// <summary>
-        /// Инициализация кэшированных данных типа <see cref="T"/>
-        /// </summary>
-        /// <param name="collection">Коллекция объектов инициализации</param>
-        protected abstract void InitCacheData(IEnumerable<T> collection);
+        }        
         protected abstract T Serialize(SqlDataReader reader);
     }
 }
