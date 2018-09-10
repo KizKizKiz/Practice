@@ -17,9 +17,8 @@ namespace Task_1
             {
                 string strConn = ConfigurationSettings.AppSettings["AnimalSqlProvider"];
 
-                collection = new Essential();
+                collection = new Essential("Animals");
                 collection.ConnectionString = strConn;
-                collection.Table = "Animals";
                 Console.WriteLine(collection.LoadById(9));
                 var animals = collection.LoadFromCacheByLinq((animal) => animal.Age > 5);
                 foreach (var element in animals) {

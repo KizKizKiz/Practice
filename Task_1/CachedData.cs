@@ -26,7 +26,6 @@ namespace Task_1
                 _table = value;
             }
         }
-
         /// <summary>
         /// Кэшированные данные
         /// </summary>

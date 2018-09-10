@@ -7,6 +7,14 @@ namespace Task_1
     class Essential:CachedData<Animal>
     {
         /// <summary>
+        /// Инициализирует сущность типа <see cref="Essential"/>
+        /// </summary>
+        /// <param name="table">Имя таблицы</param>
+        public Essential(string table)
+        {
+            Table = table;
+        }
+        /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
         /// </summary>
         /// <param name="reader">Объект чтения</param>
