@@ -64,16 +64,6 @@ namespace Task_1.Core
             return base.ToString()+
                 $"\n\tColor:{Color}" +
                 $"\n\tWings area:{WingsArea}";
-        }
-        /// <summary>
-        /// Инициализирует поля объекта <see cref="Butterfly"/>
-        /// </summary>
-        /// <param name="reader">Объект-инициализатор</param>
-        public override void Serialize(SqlDataReader reader)
-        {
-            base.Serialize(reader);
-            Color = reader["Color"].ToString();
-            WingsArea = Convert.ToSingle(reader["Wings area"]);            
-        }
+        }        
     }
 }
