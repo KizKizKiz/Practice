@@ -8,24 +8,11 @@ namespace Task_1
 {
     abstract class CachedData<T> : DataAccess<T> where T : IKey
     {
-        private string _table;
+        protected string _table;
         /// <summary>
         /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
-        public string Table
-        {
-            get
-            {
-                return _table;
-            }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value)) {
-                    throw new ArgumentException("Table name cannot be null or empty");
-                }
-                _table = value;
-            }
-        }
+        public abstract string Table { get; set; }        
         /// <summary>
         /// Кэшированные данные
         /// </summary>

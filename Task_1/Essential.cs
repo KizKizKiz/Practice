@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using Task_1.Core;
 namespace Task_1
 {
-    class Essential:CachedData<Animal>
+    class Essential : CachedData<Animal>
     {
         /// <summary>
         /// Инициализирует сущность типа <see cref="Essential"/>
@@ -14,6 +14,24 @@ namespace Task_1
         {
             Table = table;
         }
+        /// <summary>
+        /// Имя таблицы, из которой происходит выборка данных
+        /// </summary>
+        public override string Table
+        {
+            get
+            {
+                return _table;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new ArgumentException("Table name cannot be null or empty");
+                }
+                _table = value;
+            }
+        }
+
         /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
         /// </summary>
@@ -49,8 +67,8 @@ namespace Task_1
             butterfly.Name = reader["Name"].ToString();
             butterfly.Age = Convert.ToInt32(reader["Age"]);
             butterfly.IsDangerous = Convert.ToBoolean(reader["Is dangerous"]);
-            butterfly.Squad = (SQUAD)reader["Squad"];
-            butterfly.Feet= Convert.ToInt32(reader["Count of feet"]);
+            butterfly.Squad = (SQUAD) reader["Squad"];
+            butterfly.Feet = Convert.ToInt32(reader["Count of feet"]);
             butterfly.Color = reader["Color"].ToString();
             butterfly.WingsArea = Convert.ToSingle(reader["Wings area"]);
 
@@ -64,7 +82,7 @@ namespace Task_1
         private Spider InitSpider(SqlDataReader reader)
         {
             Spider spider = new Spider();
-            
+
             spider.Name = reader["Name"].ToString();
             spider.Age = Convert.ToInt32(reader["Age"]);
             spider.IsDangerous = Convert.ToBoolean(reader["Is dangerous"]);
@@ -76,6 +94,6 @@ namespace Task_1
             return spider;
         }
 
-        
+
     }
 }
