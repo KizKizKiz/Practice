@@ -11,17 +11,18 @@ namespace Task_1
         /// <summary>
         /// Открывает соединение с БД
         /// </summary>
-        public SqlConnection OpenConnection(string strConn)
+        private SqlConnection OpenConnection(string strConn)
         {
-            SqlConnection _connection = new SqlConnection(strConn);
-            SqlCommand _command = new SqlCommand(null, _connection);
-            _connection.Open();
-            return _connection;
+            SqlConnection connection = new SqlConnection(strConn);
+            if (connection.State != ConnectionState.Open) {
+                connection.Open();
+            }            
+            return connection;
         }
         /// <summary>
         /// Закрывает соединение с БД
         /// </summary>
-        public void CloseConnection(SqlConnection connection)
+        private void CloseConnection(SqlConnection connection)
         {
             if (connection.State != ConnectionState.Closed) {
                 connection.Close();
@@ -29,18 +30,29 @@ namespace Task_1
         }
         /// <summary>
         /// Возвращает коллекцию типа <see cref="T"/>, наполненную объектами из БД
-        /// </summary>
+        /// </summary>        
         /// <param name="sql"></param>        
-        public List<T> Load(string sql, SqlConnection connection)
+        public List<T> Load(string sql, string strConn)
         {
-            var data = new List<T>();
-            SqlCommand command = new SqlCommand(sql, connection);            
-            using (var reader = command.ExecuteReader()) {
-                while (reader.Read()) {     
-                    
-                    var element = Serialize(reader);
-                    data.Add(element);
+            var connection = OpenConnection(strConn);
+            var data = new List<T>();            
+            try {
+                SqlCommand command = new SqlCommand(sql, connection);
+                using (var reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        var element = Serialize(reader);
+                        data.Add(element);
+                    }
                 }
+            }
+            catch (SqlException) {
+                throw;
+            }
+            catch (Exception) {
+                throw;
+            }
+            finally {
+                CloseConnection(connection);
             }
             return data;
         }

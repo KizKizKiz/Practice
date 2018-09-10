@@ -13,27 +13,19 @@ namespace Task_1
         static void Main(string[] args)
         {
             Essential typeEssential = null;
-            SqlConnection connection =null;
             try 
-            {               
-                typeEssential = new Essential();
+            {
+                string strConn = ConfigurationSettings.AppSettings["AnimalSqlProvider"];
 
-                connection = typeEssential.OpenConnection(ConfigurationSettings.AppSettings["AnimalSqlProvider"]);
-                var data = typeEssential.Load("Select * from Animals", connection);
+                typeEssential = new Essential();                
+                var data = typeEssential.Load("Select * from Animals", strConn);
                                 
                 foreach (var element in data) {
                     Console.WriteLine(element);
                 }
             }
-            catch (SqlException e) {
-                Console.WriteLine($"Source:{e.Source}" +
-                    $"\nMessage:{e.Message}");                   
-            }
             catch (Exception e) {
                 Console.WriteLine(e.StackTrace);
-            }
-            finally {
-                typeEssential.CloseConnection(connection);
             }
             Console.ReadKey();
 
