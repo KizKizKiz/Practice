@@ -12,13 +12,14 @@ namespace Task_1
     {                
         static void Main(string[] args)
         {
-            Essential typeEssential = null;
+            Essential collection = null;
             try 
             {
                 string strConn = ConfigurationSettings.AppSettings["AnimalSqlProvider"];
 
-                typeEssential = new Essential();                
-                var data = typeEssential.Load("Select * from Animals", strConn);
+                collection = new Essential();
+                collection.ConnectionString = strConn;
+                var data = collection.Load("SELECT * FROM ANIMALS");
                                 
                 foreach (var element in data) {
                     Console.WriteLine(element);

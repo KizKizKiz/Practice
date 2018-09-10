@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 
 namespace Task_1.Core
 {
@@ -12,7 +10,7 @@ namespace Task_1.Core
         spiders = 1,
         lepidoptera = 2
     }
-    public class Animal
+    public class Animal:IKey
     {        
         /// <summary>
         /// Отряд животного
@@ -49,6 +47,11 @@ namespace Task_1.Core
                 _name = value;
             }
         }
+        /// <summary>
+        /// Идентификатор животного
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="Animal"/> с полями, выставленными в значение по умолчанию 
         /// </summary>

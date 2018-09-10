@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Task_1.Core;
 namespace Task_1
 {
-    class Essential:DataAccess<Animal>
+    class Essential:CachedData<Animal>
     {
         /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
