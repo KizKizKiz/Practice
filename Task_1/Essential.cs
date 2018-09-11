@@ -9,22 +9,13 @@ namespace Task_1
         /// <summary>
         /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
-        /// <param name="table">Имя таблицы</param>       
         public override string Table
         {
             get
             {
-                return _table;
-            }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value)) {
-                    throw new ArgumentException("Table cannot be null or empty");
-                }
-                _table = value;
+                return "Animals";                
             }
         }
-
         /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
         /// </summary>
