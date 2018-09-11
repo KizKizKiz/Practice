@@ -1,14 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Task_1.Core;
 namespace Task_1
 {
-    class Essential:DataAccess<Animal>
+    class Essential : CachedData<Animal>
     {
+        /// <summary>
+        /// Имя таблицы, из которой происходит выборка данных
+        /// </summary>
+        public override string Table
+        {
+            get
+            {
+                return "Animals";                
+            }
+        }
         /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
         /// </summary>
@@ -28,7 +35,8 @@ namespace Task_1
                 }
                 default:
                 break;
-            }            
+            }
+            animal.Id = Convert.ToInt32(reader["ID"]);
             return animal;
         }
         /// <summary>
@@ -43,8 +51,8 @@ namespace Task_1
             butterfly.Name = reader["Name"].ToString();
             butterfly.Age = Convert.ToInt32(reader["Age"]);
             butterfly.IsDangerous = Convert.ToBoolean(reader["Is dangerous"]);
-            butterfly.Squad = (SQUAD)reader["Squad"];
-            butterfly.Feet= Convert.ToInt32(reader["Count of feet"]);
+            butterfly.Squad = (SQUAD) reader["Squad"];
+            butterfly.Feet = Convert.ToInt32(reader["Count of feet"]);
             butterfly.Color = reader["Color"].ToString();
             butterfly.WingsArea = Convert.ToSingle(reader["Wings area"]);
 
@@ -58,7 +66,7 @@ namespace Task_1
         private Spider InitSpider(SqlDataReader reader)
         {
             Spider spider = new Spider();
-            
+
             spider.Name = reader["Name"].ToString();
             spider.Age = Convert.ToInt32(reader["Age"]);
             spider.IsDangerous = Convert.ToBoolean(reader["Is dangerous"]);
@@ -70,6 +78,6 @@ namespace Task_1
             return spider;
         }
 
-        
+
     }
 }

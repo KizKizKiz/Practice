@@ -12,15 +12,16 @@ namespace Task_1
     {                
         static void Main(string[] args)
         {
-            Essential typeEssential = null;
+            Essential collection = null;
             try 
             {
                 string strConn = ConfigurationSettings.AppSettings["AnimalSqlProvider"];
 
-                typeEssential = new Essential();                
-                var data = typeEssential.Load("Select * from Animals", strConn);
-                                
-                foreach (var element in data) {
+                collection = new Essential();
+                collection.ConnectionString = strConn;
+                Console.WriteLine(collection.LoadById(9));
+                var animals = collection.LoadFromCacheByLinq((animal) => animal.Age > 5);
+                foreach (var element in animals) {
                     Console.WriteLine(element);
                 }
             }
