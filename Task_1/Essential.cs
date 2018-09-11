@@ -5,11 +5,7 @@ using Task_1.Core;
 namespace Task_1
 {
     class Essential : CachedData<Animal>
-    {
-        /// <summary>
-        /// Имя таблицы, из которой происходит выборка данных
-        /// </summary>        
-        public override string Table { get; }
+    {       
         /// <summary>
         /// Инициализация сущности типа <see cref="Essential"/>
         /// </summary>
