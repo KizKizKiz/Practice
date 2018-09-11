@@ -8,7 +8,11 @@ namespace Task_1
 {
     abstract class CachedData<T> : DataAccess<T> where T : IKey
     {
-        protected string _table;    
+        protected string _table;
+        /// <summary>
+        /// Имя таблицы, из которой происходит выборка данных
+        /// </summary>
+        public abstract string Table { get; set; }        
         /// <summary>
         /// Кэшированные данные
         /// </summary>
@@ -23,7 +27,7 @@ namespace Task_1
         {
             if (!_cachedData.TryGetValue(id, out T element)) {
                 if (element == null) {
-                    element = Load($"SELECT * FROM {_table} WHERE ID={id}").
+                    element = Load($"SELECT * FROM {Table} WHERE ID={id}").
                               FirstOrDefault();
                     _cachedData.Add(id, element);                    
                 }

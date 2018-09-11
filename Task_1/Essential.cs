@@ -5,15 +5,26 @@ using Task_1.Core;
 namespace Task_1
 {
     class Essential : CachedData<Animal>
-    {       
+    {
         /// <summary>
-        /// Инициализация сущности типа <see cref="Essential"/>
+        /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
-        /// <param name="table">Имя таблицы</param>
-        public Essential(string table)
+        /// <param name="table">Имя таблицы</param>       
+        public override string Table
         {
-            _table = table;
+            get
+            {
+                return _table;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value)) {
+                    throw new ArgumentException("Table cannot be null or empty");
+                }
+                _table = value;
+            }
         }
+
         /// <summary>
         /// Возвращает объект типа <see cref="Animal"/>
         /// </summary>
