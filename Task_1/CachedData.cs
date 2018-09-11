@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Data.SqlClient;
 using System.Linq;
-
+using Task_1.Core;
 namespace Task_1
 {
     abstract class CachedData<T> : DataAccess<T> where T : IKey
-    {        
+    {
         /// <summary>
         /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
-        public abstract string Table { get; }        
+        public abstract string Table { get; }
         /// <summary>
         /// Кэшированные данные
         /// </summary>
@@ -28,7 +28,7 @@ namespace Task_1
                 if (element == null) {
                     element = Load($"SELECT * FROM {Table} WHERE ID={id}").
                               FirstOrDefault();
-                    _cachedData.Add(id, element);                    
+                    _cachedData.Add(id, element);
                 }
             }
             return element;
@@ -43,8 +43,47 @@ namespace Task_1
             if (match == null) {
                 throw new NullReferenceException();
             }
-            return _cachedData.Values.Where(match);                        
-        }        
-        protected abstract override T Serialize(SqlDataReader reader);
+            return _cachedData.Values.Where(match);
+        }
+        protected override T Serialize(SqlDataReader reader)
+        {
+            T data = default(T);
+            switch ((SQUAD) reader["Squad"]) {
+                case SQUAD.spiders: {
+                    data = InitFromRecordByType(typeof(Spider), reader);
+                    break;
+                }
+                case SQUAD.lepidoptera: {
+                    data = InitFromRecordByType(typeof(Butterfly), reader);
+                    break;
+                }
+                default:
+                break;
+            }
+            return data;
+        }
+        /// <summary>
+        /// Создает объект динамически и инициализирует свойства объекта из записи
+        /// </summary>
+        /// <param name="type">Тип объекта</param>
+        /// <param name="reader">Объект, представляющий запись</param>
+        /// <returns></returns>
+        private T InitFromRecordByType(Type type, SqlDataReader reader)
+        {
+            var element = Activator.CreateInstance(type);
+
+            var properties = type.GetProperties();
+            var propertiesName = properties.Select((prop) => prop.Name).ToList();
+            
+            for (int i = 0; i < reader.FieldCount; i++) {
+                var column = reader.GetName(i);
+                var property = properties.FirstOrDefault((prop) => prop.Name == column);
+                if (property!=null) {
+                    property.SetValue(element, reader[i]);
+                }                
+            }
+            return (T)element; 
+        }
+
     }
 }

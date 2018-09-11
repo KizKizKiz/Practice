@@ -23,11 +23,11 @@ namespace Task_1.Core
             }
         }
 
-        private float _wingsArea;
+        private double _wingsArea;
         /// <summary>
         /// Получает/задает площадь крыльев бабочки
         /// </summary>      
-        public float WingsArea
+        public double WingsArea
         {
             get { return _wingsArea; }
             set

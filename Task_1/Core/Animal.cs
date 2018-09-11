@@ -50,7 +50,7 @@ namespace Task_1.Core
         /// <summary>
         /// Идентификатор животного
         /// </summary>
-        public int Id { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="Animal"/> с полями, выставленными в значение по умолчанию 
