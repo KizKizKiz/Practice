@@ -7,8 +7,7 @@ using System.Linq;
 namespace Task_1
 {
     abstract class CachedData<T> : DataAccess<T> where T : IKey
-    {
-        protected string _table;
+    {        
         /// <summary>
         /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
