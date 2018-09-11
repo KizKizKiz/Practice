@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+
 namespace Task_1
 {
     abstract class DataAccess<T>
@@ -57,7 +59,7 @@ namespace Task_1
                 SqlCommand command = new SqlCommand(sql, connection);
                 using (var reader = command.ExecuteReader()) {
                     while (reader.Read()) {
-                        var element = Serialize(reader);
+                        var element = Serialize(reader, typeof(T));
                         data.Add(element);
                     }
                 }
@@ -72,7 +74,33 @@ namespace Task_1
                 CloseConnection(connection);
             }            
             return data;
-        }        
-        protected abstract T Serialize(SqlDataReader reader);
+        }
+        protected virtual T Serialize(SqlDataReader reader, Type type)
+        {
+            var element = InitFromRecordByType(type, reader);
+            return element;
+        }
+        /// <summary>
+        /// Создает объект динамически и инициализирует свойства объекта из записи
+        /// </summary>
+        /// <param name="type">Тип объекта</param>
+        /// <param name="reader">Объект, представляющий запись</param>
+        /// <returns></returns>
+        private T InitFromRecordByType(Type type, SqlDataReader reader)
+        {
+            var element = Activator.CreateInstance(type);
+
+            var properties = type.GetProperties();
+            var propertiesName = properties.Select((prop) => prop.Name).ToList();
+
+            for (int i = 0; i < reader.FieldCount; i++) {
+                var column = reader.GetName(i);
+                var property = properties.FirstOrDefault((prop) => prop.Name == column);
+                if (property != null) {
+                    property.SetValue(element, reader[i]);
+                }
+            }
+            return (T) element;
+        }
     }
 }

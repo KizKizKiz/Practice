@@ -44,46 +44,6 @@ namespace Task_1
                 throw new NullReferenceException();
             }
             return _cachedData.Values.Where(match);
-        }
-        protected override T Serialize(SqlDataReader reader)
-        {
-            T data = default(T);
-            switch ((SQUAD) reader["Squad"]) {
-                case SQUAD.spiders: {
-                    data = InitFromRecordByType(typeof(Spider), reader);
-                    break;
-                }
-                case SQUAD.lepidoptera: {
-                    data = InitFromRecordByType(typeof(Butterfly), reader);
-                    break;
-                }
-                default:
-                break;
-            }
-            return data;
-        }
-        /// <summary>
-        /// Создает объект динамически и инициализирует свойства объекта из записи
-        /// </summary>
-        /// <param name="type">Тип объекта</param>
-        /// <param name="reader">Объект, представляющий запись</param>
-        /// <returns></returns>
-        private T InitFromRecordByType(Type type, SqlDataReader reader)
-        {
-            var element = Activator.CreateInstance(type);
-
-            var properties = type.GetProperties();
-            var propertiesName = properties.Select((prop) => prop.Name).ToList();
-            
-            for (int i = 0; i < reader.FieldCount; i++) {
-                var column = reader.GetName(i);
-                var property = properties.FirstOrDefault((prop) => prop.Name == column);
-                if (property!=null) {
-                    property.SetValue(element, reader[i]);
-                }                
-            }
-            return (T)element; 
-        }
-
+        }                        
     }
 }
