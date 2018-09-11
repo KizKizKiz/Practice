@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Data.SqlClient;
 using System.Linq;
-
+using Task_1.Core;
 namespace Task_1
 {
     abstract class CachedData<T> : DataAccess<T> where T : IKey
-    {        
+    {
         /// <summary>
         /// Имя таблицы, из которой происходит выборка данных
         /// </summary>
-        public abstract string Table { get; }        
+        public abstract string Table { get; }
         /// <summary>
         /// Кэшированные данные
         /// </summary>
@@ -28,7 +28,7 @@ namespace Task_1
                 if (element == null) {
                     element = Load($"SELECT * FROM {Table} WHERE ID={id}").
                               FirstOrDefault();
-                    _cachedData.Add(id, element);                    
+                    _cachedData.Add(id, element);
                 }
             }
             return element;
@@ -43,8 +43,7 @@ namespace Task_1
             if (match == null) {
                 throw new NullReferenceException();
             }
-            return _cachedData.Values.Where(match);                        
-        }        
-        protected abstract override T Serialize(SqlDataReader reader);
+            return _cachedData.Values.Where(match);
+        }                        
     }
 }
