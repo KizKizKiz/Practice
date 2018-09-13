@@ -7,4 +7,7 @@ Task_1.csproj.*
 DataBinding/obj
 *.csproj
 *.csproj.user
+<<<<<<< HEAD
 DataBinding/bin/
+=======
+>>>>>>> dataBinding
