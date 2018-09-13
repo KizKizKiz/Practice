@@ -6,3 +6,4 @@ App.config
 Task_1.csproj.*
 DataBinding/obj
 *.csproj
+*.csproj.user
