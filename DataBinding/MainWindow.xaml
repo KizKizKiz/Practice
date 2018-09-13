@@ -5,8 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBinding"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="МикроZоопарк" 
+        Height="402" Width="500"
+        WindowStartupLocation="CenterScreen"
+        MinHeight="500" MinWidth="500">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0"                   
+                   HorizontalAlignment="Center"
+                   Margin="10"
+                   FontSize="15">
+            Характеристика животных
+        </TextBlock>
+        <ListView Name="animals" Grid.Column="0" Grid.Row="1"
+                  FontSize="13"
+                  Margin="10,0"
+                  ItemsSource="{Binding Animals}"                  
+                  SelectedItem="{Binding SelectedAnimal}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding StringFormat=Имя: {0}, Path=Name}"/>
+                        <TextBlock Text="{Binding StringFormat=Возраст: {0}, Path=Age}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Grid.Column="0" Grid.Row="2"
+                HorizontalAlignment="Right"                
+                Margin="0,40,10,10" Padding="30,0"
+                FontSize="14"
+                Command="{Binding Detail}"
+                CommandParameter="{Binding ElementName=animals, Path=SelectedItem}">
+            Детально
+        </Button>
     </Grid>
 </Window>
