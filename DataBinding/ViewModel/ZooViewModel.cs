@@ -24,7 +24,7 @@ namespace DataBinding.ViewModel
                 return _detail ??
                     (_detail = new RelayCommand(
                     (obj) => new AnimalDetailViewModel(SelectedAnimal, _essential),
-                    (obj) => obj != null));
+                    (obj) => SelectedAnimal != null));
             }
         }
         private Animal _selectedAnimal;

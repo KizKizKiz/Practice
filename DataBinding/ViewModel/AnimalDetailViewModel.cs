@@ -13,7 +13,7 @@ namespace DataBinding.ViewModel
     class AnimalDetailViewModel : ViewModelBase
     {
         private Essential _essential;
-        private Animal _animal;        
+        private Animal _animal;
         public Animal Animal
         {
             get
@@ -28,7 +28,7 @@ namespace DataBinding.ViewModel
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
-        private DetailView _detailView;        
+        private DetailView _detailView;
         public AnimalDetailViewModel(Animal animal, Essential essential)
         {
             _detailView = new DetailView()
@@ -37,9 +37,9 @@ namespace DataBinding.ViewModel
             };
             _animal = animal;
             _essential = essential;
-            Squads = _essential.Load("SELECT DISTINCT Squad FROM ANIMALS").
+            Squads = _essential.Load("SELECT Squad FROM CSquad").
                       Select((an) => an.Squad).ToList();
-            SelectedSquad = _animal.Squad;
+            SelectedSquad = Animal.Squad;
             _detailView.ShowDialog();
         }
         private SQUAD _squad;
@@ -50,12 +50,31 @@ namespace DataBinding.ViewModel
         {
             get
             {
-                return _animal.Squad;
+                HideSpider = Visibility.Visible;
+                HideButterfly = Visibility.Visible;
+                Insect insect = (Insect) Animal;
+                switch (_squad) {
+                    case SQUAD.spiders: {
+                        if (Animal.Squad != _squad) {
+                            Animal = new Spider();
+                        }
+
+                        HideButterfly = Visibility.Hidden;
+                        break;
+                    }
+                    case SQUAD.lepidoptera: {
+                        if (Animal.Squad != _squad) {
+                            Animal = new Butterfly();
+                        }
+                        HideSpider = Visibility.Hidden;
+                        break;
+                    }
+                }
+                return _squad;
             }
             set
-            {                
+            {
                 SetProperty(ref _squad, value);
-                HideElement();
             }
         }
         private List<SQUAD> _squads;
@@ -76,30 +95,10 @@ namespace DataBinding.ViewModel
         /// <summary>
         /// Управляет видимостью полей бабочки
         /// </summary>
-        public Visibility HideButterfly { get; set; }
+        public Visibility HideButterfly { get; set; }        
         /// <summary>
         /// Управляет видимостью полей паука
         /// </summary>
         public Visibility HideSpider { get; set; }
-        /// <summary>
-        /// Определяет тип животного и устанавливает видимость полей
-        /// </summary>
-        private void HideElement()
-        {
-            switch (_animal.Squad) {
-                case SQUAD.spiders: {
-                    HideButterfly = Visibility.Collapsed;
-                    HideSpider = Visibility.Visible;
-                    break;
-                }
-                case SQUAD.lepidoptera: {
-                    HideButterfly = Visibility.Visible;
-                    HideSpider = Visibility.Collapsed;
-                    break;
-                }
-                default:
-                break;
-            }
-        }
     }
 }

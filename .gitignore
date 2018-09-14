@@ -5,9 +5,6 @@ Task_1/obj/
 App.config
 Task_1.csproj.*
 DataBinding/obj
-*.csproj
 *.csproj.user
-<<<<<<< HEAD
 DataBinding/bin/
-=======
->>>>>>> dataBinding
+

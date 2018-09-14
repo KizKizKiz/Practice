@@ -21,11 +21,11 @@
                    FontSize="15">
             Характеристика животных
         </TextBlock>
-        <ListView Name="animals" Grid.Column="0" Grid.Row="1"
+        <ListView Grid.Column="0" Grid.Row="1"
                   FontSize="13"
                   Margin="10,0"
                   ItemsSource="{Binding Animals}"                  
-                  SelectedItem="{Binding SelectedAnimal}">
+                  SelectedItem="{Binding SelectedAnimal, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -39,8 +39,7 @@
                 HorizontalAlignment="Right"                
                 Margin="0,40,10,10" Padding="30,0"
                 FontSize="14"
-                Command="{Binding Detail}"
-                CommandParameter="{Binding ElementName=animals, Path=SelectedItem}">
+                Command="{Binding Detail}">
             Детально
         </Button>
     </Grid>
