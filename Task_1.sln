@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task_1", "Task_1\Task_1.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBinding", "DataBinding\DataBinding.csproj", "{67A46C51-9985-4B11-82B3-957F850F729E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisibilityTest", "VisibilityTest\VisibilityTest.csproj", "{F136B227-151B-41B5-BB6F-B3D87390F762}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{67A46C51-9985-4B11-82B3-957F850F729E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67A46C51-9985-4B11-82B3-957F850F729E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67A46C51-9985-4B11-82B3-957F850F729E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F136B227-151B-41B5-BB6F-B3D87390F762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F136B227-151B-41B5-BB6F-B3D87390F762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F136B227-151B-41B5-BB6F-B3D87390F762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F136B227-151B-41B5-BB6F-B3D87390F762}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

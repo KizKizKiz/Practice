@@ -2,7 +2,6 @@
 .vs/
 Task_1/bin/
 Task_1/obj/
-App.config
 DataBinding/obj
 DataBinding/bin/
 *.csproj.user

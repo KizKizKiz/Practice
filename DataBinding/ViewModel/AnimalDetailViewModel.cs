@@ -55,13 +55,18 @@ namespace DataBinding.ViewModel
             set
             {                
                 SetProperty(ref _squad, value);
-                if (_squad == SQUAD.spiders) {
-                    HideButterfly = Visibility.Hidden;
+                switch (_squad) {
+                    case SQUAD.spiders: {
+                        HideButterfly = Visibility.Collapsed;
+                        HideSpider = Visibility.Visible;
+                        break;
+                    }
+                    case SQUAD.lepidoptera: {
+                        HideButterfly = Visibility.Visible;
+                        HideSpider = Visibility.Collapsed;
+                        break;
+                    }                    
                 }
-                else {
-                    HideSpider = Visibility.Hidden;
-                }
-                
             }
         }
         private List<SQUAD> _squads;
