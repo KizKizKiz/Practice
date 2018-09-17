@@ -3,8 +3,6 @@
 Task_1/bin/
 Task_1/obj/
 App.config
-Task_1.csproj.*
 DataBinding/obj
-*.csproj.user
 DataBinding/bin/
-
+*.csproj.user

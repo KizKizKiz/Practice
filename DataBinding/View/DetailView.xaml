@@ -93,7 +93,7 @@
                  Text="{Binding Animal.HasPoison}"/>
         <TextBox Grid.Row="7" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
-                 Visibility="{Binding HideButterfly,NotifyOnSourceUpdated=True}"
+                 Visibility="{Binding HideButterfly}"
                  Text="{Binding Animal.Color}"/>
         <TextBox Grid.Row="8" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}" 

@@ -1,0 +1,47 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Content_test"
+        xmlns:dxdash="http://schemas.devexpress.com/winfx/2008/xaml/dashboard" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:dxga="http://schemas.devexpress.com/winfx/2008/xaml/gauges" x:Class="Content_test.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        x:Name="mainWindow"
+        SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock x:Name="field" Margin="5,10"
+                       Text="Field1"
+                       HorizontalAlignment="Center"
+                       Visibility="{Binding VisField1, Mode=OneWayToSource}"/>
+            <TextBlock/>
+            <TextBox Margin="5,10"
+                     MinWidth="100"
+                     >
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Margin="5,10"
+                       Text="Field2"
+                       HorizontalAlignment="Center"
+                       Visibility="{Binding VisField2}"/>
+            <TextBlock/>
+            <TextBox Margin="5,10"
+                     MinWidth="100"
+                     Visibility="{Binding VisField2}">
+            </TextBox>
+        </StackPanel>
+        <ComboBox Grid.Row="2" Margin="5,10"
+                  ItemsSource="{Binding Windows}"
+                  SelectedItem="{Binding SelectedWindows}"/>
+
+    </Grid>
+</Window>

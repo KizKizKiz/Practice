@@ -50,31 +50,18 @@ namespace DataBinding.ViewModel
         {
             get
             {
-                HideSpider = Visibility.Visible;
-                HideButterfly = Visibility.Visible;
-                Insect insect = (Insect) Animal;
-                switch (_squad) {
-                    case SQUAD.spiders: {
-                        if (Animal.Squad != _squad) {
-                            Animal = new Spider();
-                        }
-
-                        HideButterfly = Visibility.Hidden;
-                        break;
-                    }
-                    case SQUAD.lepidoptera: {
-                        if (Animal.Squad != _squad) {
-                            Animal = new Butterfly();
-                        }
-                        HideSpider = Visibility.Hidden;
-                        break;
-                    }
-                }
                 return _squad;
             }
             set
-            {
+            {                
                 SetProperty(ref _squad, value);
+                if (_squad == SQUAD.spiders) {
+                    HideButterfly = Visibility.Hidden;
+                }
+                else {
+                    HideSpider = Visibility.Hidden;
+                }
+                
             }
         }
         private List<SQUAD> _squads;
@@ -92,13 +79,35 @@ namespace DataBinding.ViewModel
                 SetProperty(ref _squads, value);
             }
         }
+        private Visibility _hideButterfly;
         /// <summary>
         /// Управляет видимостью полей бабочки
-        /// </summary>
-        public Visibility HideButterfly { get; set; }        
+        /// </summary>        
+        public Visibility HideButterfly
+        {
+            get
+            {
+                return _hideButterfly;
+            }
+            set
+            {
+                SetProperty(ref _hideButterfly, value);
+            }
+        }
+        private Visibility _hideSpider;
         /// <summary>
         /// Управляет видимостью полей паука
         /// </summary>
-        public Visibility HideSpider { get; set; }
+        public Visibility HideSpider
+        {
+            get
+            {
+                return _hideSpider;
+            }
+            set
+            {
+                SetProperty(ref _hideSpider, value);
+            }
+        }
     }
 }
