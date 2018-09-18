@@ -63,33 +63,36 @@ namespace DataBinding.ViewModel
                     case SQUAD.spiders: {
                         HideButterfly = Visibility.Collapsed;
                         HideSpider = Visibility.Visible;
-                        TryChangeTypeOfAnimal(new Spider());
+                        TryChangeTypeOfAnimal(typeof(Spider));
                         break;
                     }
                     case SQUAD.lepidoptera: {
                         HideButterfly = Visibility.Visible;
                         HideSpider = Visibility.Collapsed;
-                        TryChangeTypeOfAnimal(new Butterfly());
+                        TryChangeTypeOfAnimal(typeof(Butterfly));
                         break;
                     }
                 }
             }
         }
-        private bool TryChangeTypeOfAnimal(Insect insect)
+        private bool TryChangeTypeOfAnimal(Type type)
         {
             if (_squad == _cachedInsect.Squad) {
                 Animal = _cachedInsect;
                 return false;
             }
+            var _cachedInsectProperties = _cachedInsect.GetType().GetProperties();
+            var insect = Activator.CreateInstance(type);            
+            var properties = type.GetProperties();
+            foreach (var propertyInfo in properties) {
+                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
+                if (prop!=null) {
+                    var value = prop.GetValue(_cachedInsect);
+                    prop.SetValue(insect, value);
+                }
+            }
 
-            insect.Age = _cachedInsect.Age;
-            insect.Feet = _cachedInsect.Feet;
-            insect.ID = _cachedInsect.ID;
-            insect.IsDangerous = _cachedInsect.IsDangerous;
-            insect.Name = _cachedInsect.Name;
-            insect.Squad = _cachedInsect.Squad;
-
-            Animal = insect;
+            Animal = (Insect)insect;
             return true;
         }
 
