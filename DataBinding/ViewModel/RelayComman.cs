@@ -11,7 +11,7 @@ namespace DataBinding.ViewModel
     {
         private Action<object> _action;
         private Func<object, bool> _canExecute;
-        
+        private string _name;
         public bool CanExecute(object parameter)
         {
             return _canExecute == null || _canExecute(parameter);
@@ -20,8 +20,9 @@ namespace DataBinding.ViewModel
         {
             _action?.Invoke(parameter);
         }
-        public RelayCommand(Action<object> action, Func<object, bool> canExecute)
+        public RelayCommand(string name, Action<object> action, Func<object, bool> canExecute)
         {
+            _name = name;
             _action = action;
             _canExecute = canExecute;
         }
@@ -29,6 +30,13 @@ namespace DataBinding.ViewModel
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
+        }
+        public override string ToString()
+        {
+            if (string.IsNullOrWhiteSpace(_name)) {
+                return "Command";
+            }
+            return _name;
         }
     }
 }

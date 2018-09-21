@@ -5,13 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DataBinding.View"
       mc:Ignorable="d"       
-      Title="Детальная информация" 
-      Height="400" Width="400"
-      WindowStartupLocation="CenterScreen">
+      Title="Детальная информация"     
+      WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <Style x:Key="DefaultTxtBlock" TargetType="{x:Type TextBlock}">
-            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="Margin" Value="20,5"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="14"/>
@@ -19,7 +18,7 @@
         <Style x:Key="DefaultTxtBox" TargetType="{x:Type TextBox}">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="MinWidth" Value="110"/>
+            <Setter Property="MinWidth" Value="90"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
     </Window.Resources>

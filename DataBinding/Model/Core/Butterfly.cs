@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace Task_1.Core
 {
-    public class Butterfly:Insect
+    public class Butterfly: Insect
     {
         private string _color;
         /// <summary>
@@ -16,7 +16,7 @@ namespace Task_1.Core
             get { return _color; }
             set
             {
-                if (String.IsNullOrWhiteSpace(value)) {
+                if (string.IsNullOrWhiteSpace(value)) {
                     throw new ArgumentException("Color should not be null or has white space");
                 }
                 _color = value;
