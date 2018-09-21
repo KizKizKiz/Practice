@@ -4,43 +4,54 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataBinding"
+        xmlns:actList="clr-namespace:DataBinding.Controls"
         mc:Ignorable="d"
         Title="МикроZоопарк" 
         Height="402" Width="500"
         WindowStartupLocation="CenterScreen"
-        MinHeight="500" MinWidth="500">
+        SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0"                   
                    HorizontalAlignment="Center"
                    Margin="10"
-                   FontSize="15">
+                   Style="{StaticResource DefaultStyle}">
             Характеристика животных
         </TextBlock>
         <ListView Grid.Column="0" Grid.Row="1"
                   FontSize="13"
                   Margin="10,0"
                   ItemsSource="{Binding Animals}"                  
-                  SelectedItem="{Binding SelectedAnimal, UpdateSourceTrigger=PropertyChanged}">
+                  SelectedItem="{Binding SelectedAnimal}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock Text="{Binding StringFormat=Имя: {0}, Path=Name}"/>
-                        <TextBlock Text="{Binding StringFormat=Возраст: {0}, Path=Age}"/>
+                        <TextBlock Text="{Binding StringFormat=Имя: {0},
+                            Path=Name}"/>
+                        <TextBlock Text="{Binding StringFormat=Тип: {0},
+                            Path=Squad}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Grid.Column="0" Grid.Row="2"
-                HorizontalAlignment="Right"                
-                Margin="0,40,10,10" Padding="30,0"
-                FontSize="14"
-                Command="{Binding Detail}">
-            Детально
-        </Button>
+        <StackPanel Grid.Row="2">
+            <Button Grid.Column="0" Grid.Row="2"
+                Margin="10,5,10,0"                
+                Command="{Binding Detail}"
+                Background="{DynamicResource DefaultColor}"
+                Content="Детально">
+            </Button>
+            <ComboBox Margin="10"
+                      ItemsSource="{Binding Colors}"
+                      SelectedItem="{Binding SelectedColor}">
+            </ComboBox>
+        </StackPanel>
+
+        <actList:ActionList Grid.Row="4" Actions="{Binding SomeActions}"/>
     </Grid>
 </Window>
