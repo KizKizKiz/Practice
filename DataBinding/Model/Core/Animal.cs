@@ -16,8 +16,8 @@ namespace DataBinding.Core
         /// <summary>
         /// Отряд животного
         /// </summary>
-        public virtual AnimalType Squad { get; set; }
-        public int SquadId { get; set; }
+        public virtual AnimalType AnimalType { get; set; }
+        public SQUAD SquadId { get; set; }
 
         private int _age;
         /// <summary>
@@ -77,7 +77,7 @@ namespace DataBinding.Core
         {
             return $"Name:{Name}" +
                    $"\n\tAge:{Age}"+
-                   $"\n\tSquad:{Squad}";
+                   $"\n\tSquad:{SquadId}";
         }
        
     }

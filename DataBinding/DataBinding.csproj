@@ -88,7 +88,7 @@
     <Compile Include="Model\DAL\DataAccessLayer.cs" />
     <Compile Include="Model\DAL\DBAnimal.cs" />
     <Compile Include="ViewModel\AnimalDetailViewModel.cs" />
-    <Compile Include="ViewModel\RelayComman.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ZooViewModel.cs" />
     <Compile Include="View\DetailView.xaml.cs">

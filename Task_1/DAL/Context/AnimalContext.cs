@@ -30,7 +30,7 @@ namespace Task_1.DAL.Context
                 ToTable("Squads").
                 HasMany(m => m.Animals).
                 WithRequired(r => r.Squad).
-                HasForeignKey(c=>c.SquadId);
+                HasForeignKey(c=>c);
         }
     }
 }

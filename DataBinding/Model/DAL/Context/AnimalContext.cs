@@ -23,7 +23,8 @@ namespace DataBinding.Model.DAL.Context
             modelBuilder.Entity<AnimalType>().
                 ToTable("Squads").
                 HasMany(m => m.Animals).
-                WithRequired(r => r.Squad);
+                WithRequired(m=>m.AnimalType).
+                HasForeignKey(k=>k.SquadId);
         }
     }
 }

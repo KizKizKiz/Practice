@@ -17,8 +17,8 @@ namespace DataBinding.Model
         protected DbSet<T> Entity { get; set; }
         public DataAccessLayer()
         {
-            Entity = Context.Set<T>();                 
-            
+            Entity = Context.Set<T>();
+            Context.Configuration.AutoDetectChangesEnabled = false;
         }
         public IEnumerable<T> Load()
         {
@@ -34,21 +34,25 @@ namespace DataBinding.Model
             return includeProperties
                 .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
-        public void Add(T item)
+        public void Attach(T item)
         {
-            Context.Entry(item).State = EntityState.Added;
-            Entity.Add(item);
-        }       
+            Context.Entry(item).State = EntityState.Unchanged;
+        }
         public T Save(T item)
         {
             Context.Entry(item).State = EntityState.Modified;
             Context.SaveChanges();
+            Context.Entry(item).State = EntityState.Detached;
             return item;
         }
+        //public void Attach(T item)
+        //{            
+        //    Entity.Attach(item);
+        //}
         public bool HasChanged(T item)
         {
-            Entity.Attach(item);   
-            Debug.WriteLine(Context.Entry(item).State);
+            Debug.WriteLine($"{item}\n{Context.Entry(item).State}");
+            Context.ChangeTracker.DetectChanges();                        
             return Context.ChangeTracker.HasChanges();
         }
     }

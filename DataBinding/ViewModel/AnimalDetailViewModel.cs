@@ -8,6 +8,7 @@ using System.Windows;
 using DataBinding.Model;
 using DataBinding.Core;
 using DataBinding.Model.DAL;
+using System.Diagnostics;
 
 namespace DataBinding.ViewModel
 {
@@ -31,24 +32,24 @@ namespace DataBinding.ViewModel
         /// Окно детального отображения данных
         /// </summary>
         private DetailView _detailView;
-        public AnimalDetailViewModel(Animal animal, DBAnimal essential)
+        public AnimalDetailViewModel(Animal animal, DBAnimal context)
         {            
             _detailView = new DetailView()
             {
                 DataContext = this
             };
-            _animal = animal;
-            _cachedInsect = (Insect) _animal;
-            _animals = essential;
+            Animal = animal;
+            _cachedInsect =  _animal;
+            _animals = context;
             Squads = _animals.              
                 Load().
-                Select(c=>c.Squad.Type).
+                Select(c=>c.SquadId).
                 Distinct().
-                ToList();
-            SelectedSquad = Animal.Squad.Type;
+                ToList();            
+            SelectedSquad = Animal.SquadId;
             _detailView.ShowDialog();
         }
-        private Insect _cachedInsect;
+        private Animal _cachedInsect;
 
         private SQUAD _squad;
         /// <summary>
@@ -62,8 +63,7 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _squad, value);
-
+                SetProperty(ref _squad, value);               
                 switch (_squad) {
                     case SQUAD.spiders: {
                         HideButterfly = Visibility.Collapsed;
@@ -77,30 +77,55 @@ namespace DataBinding.ViewModel
                         TryChangeTypeOfAnimal(typeof(Butterfly));
                         break;
                     }
-                }
+                }                           
             }
         }
         private bool TryChangeTypeOfAnimal(Type type)
         {
-            if (_squad == _cachedInsect.Squad.Type) {
+            if (_squad == _cachedInsect.SquadId) {
                 Animal = _cachedInsect;
                 return false;
             }
             var _cachedInsectProperties = _cachedInsect.GetType().GetProperties();
-            var insect = Activator.CreateInstance(type);            
+            var insect = (Animal) Activator.CreateInstance(type);            
             var properties = type.GetProperties();
             foreach (var propertyInfo in properties) {
-                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
-                if (prop != null) {                    
+                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);                
+                if (prop != null && prop.PropertyType != typeof(AnimalType)) {
                     var value = prop.GetValue(_cachedInsect);
                     prop.SetValue(insect, value);
                 }                                
-            }
+            }            
 
-            Animal = (Insect)insect;
+            Animal = insect;
+            Animal.AnimalType = _cachedInsect.AnimalType;
             return true;
         }
 
+        private RelayCommand _saveToDb;
+        public RelayCommand Save
+        {
+            get
+            {
+                return _saveToDb ??
+                    (_saveToDb = new RelayCommand("Сохранить",
+                    (obj) => _animals.Save(Animal),
+                    (obj) => _animals.HasChanged(Animal) == true));
+            }
+        }
+        private RelayCommand _cancel;
+        public RelayCommand Cancel
+        {
+            get
+            {
+                return _cancel ??
+                    (_cancel = new RelayCommand("Отмена",
+                    (obj)=> {                        
+                        _detailView.Close();
+                    },
+                    null ));
+            }
+        }
         private List<SQUAD> _squads;
         /// <summary>
         /// Получает/задает типы животных

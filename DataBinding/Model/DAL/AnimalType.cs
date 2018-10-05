@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataBinding.Model
 {
-    public class AnimalType:IKey
+    public class AnimalType
     {
-        public int ID { get; set; }
-        public SQUAD Type { get; set; }
-
+        public SQUAD ID { get; set; }        
         public virtual List<Animal> Animals { get; set; }
     }
 }

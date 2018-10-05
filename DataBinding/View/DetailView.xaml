@@ -20,11 +20,12 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="90"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5,0"></Setter>
+            <Setter Property="Margin" Value="5,0"/>
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -100,5 +101,17 @@
                  Style="{StaticResource DefaultTxtBox}" 
                  Visibility="{Binding HideButterfly}"
                  Text="{Binding Animal.WingsArea}"/>
+        <Button Grid.Column="0" Grid.Row="9" 
+                Margin="5,5,10,5" 
+                Padding="5,5"                        
+                Command="{Binding Save}"
+                Content="{Binding Save}">        
+        </Button>
+        <Button Grid.Column="1" Grid.Row="9" 
+                Margin="5,5,10,5" 
+                Padding="5,5"                        
+                Command="{Binding Cancel}"
+                Content="{Binding Cancel}">
+        </Button>
     </Grid>
 </Window>

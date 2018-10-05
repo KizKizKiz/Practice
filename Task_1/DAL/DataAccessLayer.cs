@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace Task_1
 {
-    abstract class DataAccessLayer<T>:IDisposable where T : class
+    abstract class DataAccessLayer<T> where T : class
     {
         private protected DbContext _context;
         protected abstract DbContext Context { get; }
@@ -21,7 +21,7 @@ namespace Task_1
         }
         public IEnumerable<T> Load()
         {
-            return Entity.AsNoTracking().ToList();
+            return Entity.ToList();
         }
         public IEnumerable<T> LoadWithInclude(params Expression<Func<T, object>>[] includeProperties)
         {
@@ -44,10 +44,6 @@ namespace Task_1
                 Context.Entry(element).State = EntityState.Modified;
             }
             Context.SaveChanges();
-        }
-        public void Dispose()
-        {
-            Context.Dispose();
         }
     }
 }

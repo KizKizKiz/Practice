@@ -18,7 +18,7 @@ namespace Task_1.Core
         /// Отряд животного
         /// </summary>
         public virtual AnimalType Squad { get; set; }
-        public int SquadId { get; set; }
+        public SQUAD SquadId { get; set; }
         private int _age;
         /// <summary>
         /// Получает/задает имя животного

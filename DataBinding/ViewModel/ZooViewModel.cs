@@ -66,18 +66,7 @@ namespace DataBinding.ViewModel
                     (obj) => new AnimalDetailViewModel(SelectedAnimal, _essential),
                     (obj) => SelectedAnimal != null));
             }
-        }
-        private RelayCommand _saveToDb;
-        public RelayCommand SaveToDB
-        {
-            get
-            {
-                return _saveToDb ??
-                    (_saveToDb = new RelayCommand("Детально",
-                    (obj) => _essential.Save(SelectedAnimal),
-                    (obj) => SelectedAnimal!=null && _essential.HasChanged(SelectedAnimal) == true));
-            }
-        }
+        }        
         private Animal _selectedAnimal;
         /// <summary>
         /// Получает/задает выбранное животное

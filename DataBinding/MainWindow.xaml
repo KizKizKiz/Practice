@@ -33,32 +33,19 @@
                         <TextBlock Text="{Binding StringFormat=Имя: {0},
                             Path=Name}"/>
                         <TextBlock Text="{Binding StringFormat=Тип: {0},
-                            Path=Squad.Type}"/>
+                            Path=SquadId}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Grid.Row="2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"
-                        Margin="10,5,0,5"    
-                        Padding="5,5"
+            <Button Grid.Column="0"
+                        Margin="10,5,10,0"    
+                        Padding="5"
                         Command="{Binding Detail}"
                         Background="{DynamicResource DefaultColor}"
                         Content="Детально">
-                </Button>
-                <Button Grid.Column="1"
-                        Margin="5,5,10,5" 
-                        Padding="5,5"
-                        Background="{DynamicResource DefaultColor}"
-                        Command="{Binding SaveToDB}"
-                        Content="Сохранить изменения">
-                </Button>
-            </Grid>
+            </Button>
             <ComboBox Margin="10,5"
                       ItemsSource="{Binding Colors}"
                       SelectedItem="{Binding SelectedColor}">

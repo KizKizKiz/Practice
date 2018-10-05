@@ -16,15 +16,10 @@ namespace Task_1
         {            
             try 
             {
-                using (DBAnimal essential = new DBAnimal()) {
-                    foreach (var item in essential.Load()) {
-                        Console.WriteLine(item);
-                    }                    
-                    essential.Add(new Spider() { Name = "XXXXXXXXXXXXXXX", SquadId=2 });
-                    essential.Update();
+                DBAnimal essential = new DBAnimal();
+                foreach (var item in essential.Load()) {
+                    Console.WriteLine(item);
                 }
-                
-                
             }
             catch (Exception e) {
                 Console.WriteLine(e.StackTrace);
