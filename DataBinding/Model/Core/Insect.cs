@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Task_1.Core
+namespace DataBinding.Core
 {
     public class Insect:Animal
     {

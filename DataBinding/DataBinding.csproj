@@ -38,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,9 +48,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +81,12 @@
     <Compile Include="Controls\ActionList.xaml.cs">
       <DependentUpon>ActionList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\DAL\AnimalType.cs" />
+    <Compile Include="Model\DAL\CachedData.cs" />
+    <Compile Include="Model\DAL\Context\AnimalContext.cs" />
+    <Compile Include="Model\DAL\Context\DatabaseInitializer.cs" />
+    <Compile Include="Model\DAL\DataAccessLayer.cs" />
+    <Compile Include="Model\DAL\DBAnimal.cs" />
     <Compile Include="ViewModel\AnimalDetailViewModel.cs" />
     <Compile Include="ViewModel\RelayComman.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
@@ -109,10 +124,7 @@
     <Compile Include="Model\Core\Butterfly.cs" />
     <Compile Include="Model\Core\Insect.cs" />
     <Compile Include="Model\Core\Spider.cs" />
-    <Compile Include="Model\DAL\CachedData.cs" />
-    <Compile Include="Model\DAL\DataAccessLayer.cs" />
-    <Compile Include="Model\Essential.cs" />
-    <Compile Include="Model\DAL\IKey.cs" />
+    <Compile Include="Model\Core\IKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -130,6 +142,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using DataBinding.Model;
+using System;
 
-namespace Task_1.Core
+namespace DataBinding.Core
 {
     /// <summary>
     /// Отряды животных
@@ -11,11 +12,12 @@ namespace Task_1.Core
         lepidoptera = 2
     }
     public class Animal:IKey
-    {        
+    {
         /// <summary>
         /// Отряд животного
         /// </summary>
-        public SQUAD Squad { get; set; }
+        public virtual AnimalType Squad { get; set; }
+        public int SquadId { get; set; }
 
         private int _age;
         /// <summary>

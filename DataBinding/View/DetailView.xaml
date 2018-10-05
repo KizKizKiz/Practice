@@ -20,10 +20,12 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="90"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5,0"></Setter>
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -70,7 +72,7 @@
                    Style="{StaticResource DefaultTxtBlock}"
                    Visibility="{Binding HideButterfly}"/>
 
-        <TextBox Grid.Row="1" Grid.Column="1"
+        <TextBox Grid.Row="1" Grid.Column="1"                 
                  Style="{StaticResource DefaultTxtBox}"
                  Text="{Binding Path=Animal.Name}"/>
         <TextBox Grid.Row="2" Grid.Column="1"

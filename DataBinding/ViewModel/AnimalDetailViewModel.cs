@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Task_1.Core;
-using Task_1;
 using DataBinding.View;
 using System.Windows;
+using DataBinding.Model;
+using DataBinding.Core;
+using DataBinding.Model.DAL;
 
 namespace DataBinding.ViewModel
 {
     class AnimalDetailViewModel : ViewModelBase
     {
-        private Essential _essential;
+        private DBAnimal _animals;
+
         private Animal _animal;
         public Animal Animal
         {
@@ -29,18 +31,21 @@ namespace DataBinding.ViewModel
         /// Окно детального отображения данных
         /// </summary>
         private DetailView _detailView;
-        public AnimalDetailViewModel(Animal animal, Essential essential)
-        {
+        public AnimalDetailViewModel(Animal animal, DBAnimal essential)
+        {            
             _detailView = new DetailView()
             {
                 DataContext = this
             };
             _animal = animal;
             _cachedInsect = (Insect) _animal;
-            _essential = essential;
-            Squads = _essential.Load("SELECT Squad FROM CSquad").
-                      Select((an) => an.Squad).ToList();
-            SelectedSquad = Animal.Squad;
+            _animals = essential;
+            Squads = _animals.              
+                Load().
+                Select(c=>c.Squad.Type).
+                Distinct().
+                ToList();
+            SelectedSquad = Animal.Squad.Type;
             _detailView.ShowDialog();
         }
         private Insect _cachedInsect;
@@ -77,7 +82,7 @@ namespace DataBinding.ViewModel
         }
         private bool TryChangeTypeOfAnimal(Type type)
         {
-            if (_squad == _cachedInsect.Squad) {
+            if (_squad == _cachedInsect.Squad.Type) {
                 Animal = _cachedInsect;
                 return false;
             }
@@ -86,10 +91,10 @@ namespace DataBinding.ViewModel
             var properties = type.GetProperties();
             foreach (var propertyInfo in properties) {
                 var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
-                if (prop!=null) {
+                if (prop != null) {                    
                     var value = prop.GetValue(_cachedInsect);
                     prop.SetValue(insect, value);
-                }
+                }                                
             }
 
             Animal = (Insect)insect;

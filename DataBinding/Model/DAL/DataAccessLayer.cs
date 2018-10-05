@@ -4,103 +4,52 @@ using System.Data.Common;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Data.Entity;
+using System.Linq.Expressions;
+using System.Diagnostics;
 
-namespace Task_1
+namespace DataBinding.Model
 {
-    abstract class DataAccess<T>
-    {                
-        private string _connectionString;
-        /// <summary>
-        /// Строка подключения к БД
-        /// </summary>
-        public string ConnectionString
+    abstract class DataAccessLayer<T> where T : class
+    {
+        private protected DbContext _context;
+        protected abstract DbContext Context { get; }
+        protected DbSet<T> Entity { get; set; }
+        public DataAccessLayer()
         {
-            get
-            {
-                return _connectionString;
-            }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value)) {
-                    throw new ArgumentException("Connection string cannot be null or empty");
-                }
-                _connectionString = value;
-            }
+            Entity = Context.Set<T>();                 
+            
         }
-        /// <summary>
-        /// Открывает соединение с БД
-        /// </summary>
-        private SqlConnection OpenConnection()
+        public IEnumerable<T> Load()
         {
-            SqlConnection connection = new SqlConnection(ConnectionString);
-            if (connection.State != ConnectionState.Open) {
-                connection.Open();
-            }
-            return connection;
+            return Entity.AsNoTracking();
         }
-        /// <summary>
-        /// Закрывает соединение с БД
-        /// </summary>
-        private void CloseConnection(SqlConnection connection)
+        public IEnumerable<T> LoadWithInclude(params Expression<Func<T, object>>[] includeProperties)
         {
-            if (connection.State != ConnectionState.Closed) {
-                connection.Close();
-            }
+            return Include(includeProperties);
         }
-        /// <summary>
-        /// Возвращает коллекцию типа <see cref="T"/>, наполненную объектами из БД
-        /// </summary>        
-        /// <param name="sql"></param>        
-        public List<T> Load(string sql)
+        private IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties)
         {
-            var connection = OpenConnection();
-            var data = new List<T>();
-            try {
-                SqlCommand command = new SqlCommand(sql, connection);
-                using (var reader = command.ExecuteReader()) {
-                    while (reader.Read()) {
-                        var element = Serialize(reader, typeof(T));
-                        data.Add(element);
-                    }
-                }
-            }
-            catch (SqlException) {
-                throw;
-            }
-            catch (Exception) {
-                throw;
-            }
-            finally {
-                CloseConnection(connection);
-            }            
-            return data;
+            IQueryable<T> query = Entity.AsNoTracking();
+            return includeProperties
+                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
-        protected virtual T Serialize(SqlDataReader reader, Type type)
+        public void Add(T item)
         {
-            var element = InitFromRecordByType(type, reader);
-            return element;
+            Context.Entry(item).State = EntityState.Added;
+            Entity.Add(item);
+        }       
+        public T Save(T item)
+        {
+            Context.Entry(item).State = EntityState.Modified;
+            Context.SaveChanges();
+            return item;
         }
-        /// <summary>
-        /// Создает объект динамически и инициализирует свойства объекта из записи
-        /// </summary>
-        /// <param name="type">Тип объекта</param>
-        /// <param name="reader">Объект, представляющий запись</param>
-        /// <returns></returns>
-        private T InitFromRecordByType(Type type, SqlDataReader reader)
+        public bool HasChanged(T item)
         {
-            var element = Activator.CreateInstance(type);
-
-            var properties = type.GetProperties();
-            var propertiesName = properties.Select((prop) => prop.Name).ToList();
-
-            for (int i = 0; i < reader.FieldCount; i++) {
-                var column = reader.GetName(i);
-                var property = properties.FirstOrDefault((prop) => prop.Name == column);
-                if (property != null) {
-                    property.SetValue(element, reader[i]);
-                }
-            }
-            return (T) element;
+            Entity.Attach(item);   
+            Debug.WriteLine(Context.Entry(item).State);
+            return Context.ChangeTracker.HasChanges();
         }
     }
 }

@@ -4,19 +4,20 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Configuration;
-using Task_1.Core;
-using Task_1;
 using DataBinding.View;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Reflection;
+using DataBinding.Core;
+using DataBinding.Model;
+using DataBinding.Model.DAL;
 
 namespace DataBinding.ViewModel
 {
     class ZooViewModel : ViewModelBase
     {
-        private Essential _essential;
+        private DBAnimal _essential;
         private PropertyInfo[] _propertiesOfColors;
         private List<string> _colors;
         /// <summary>
@@ -33,7 +34,9 @@ namespace DataBinding.ViewModel
                 SetProperty(ref _colors, value);
             }
         }
-
+        /// <summary>
+        /// Получает/задает выбранный цвет
+        /// </summary>
         private string _selectedColor;
         public string SelectedColor
         {
@@ -64,6 +67,17 @@ namespace DataBinding.ViewModel
                     (obj) => SelectedAnimal != null));
             }
         }
+        private RelayCommand _saveToDb;
+        public RelayCommand SaveToDB
+        {
+            get
+            {
+                return _saveToDb ??
+                    (_saveToDb = new RelayCommand("Детально",
+                    (obj) => _essential.Save(SelectedAnimal),
+                    (obj) => SelectedAnimal!=null && _essential.HasChanged(SelectedAnimal) == true));
+            }
+        }
         private Animal _selectedAnimal;
         /// <summary>
         /// Получает/задает выбранное животное
@@ -76,7 +90,7 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty<Animal>(ref _selectedAnimal, value);
+                SetProperty(ref _selectedAnimal, value);
             }
         }
 
@@ -100,27 +114,8 @@ namespace DataBinding.ViewModel
             _propertiesOfColors = typeof(Colors).GetProperties();
             var colorsName = _propertiesOfColors.Select((color) => color.Name);
             Colors = new List<string>(colorsName);
-            _essential = new Essential();
-            _essential.ConnectionString = ConfigurationSettings.AppSettings["AnimalSqlProvider"];
-            Animals = _essential.Load("SELECT * FROM ANIMALS");
-
-            SomeActions = new List<ICommand>()
-            {
-                new RelayCommand("Show 1", (obj)=>MessageBox.Show("Hello 1"),(obj)=>true),
-                new RelayCommand("Show 2", (obj)=>MessageBox.Show("Hello 2"),(obj)=>true)
-            };        
-        }
-        private List<ICommand> _actions;
-        public List<ICommand> SomeActions
-        {
-            get
-            {
-                return _actions;
-            }
-            set
-            {
-                SetProperty(ref _actions, value);
-            }
-        }
+            _essential = new DBAnimal();            
+            Animals = _essential.Load().ToList();       
+        }        
     }
 }
