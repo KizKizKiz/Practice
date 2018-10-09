@@ -9,7 +9,7 @@ namespace DataBinding.Model
 {
     public class AnimalType
     {
-        public SQUAD ID { get; set; }        
-        public virtual List<Animal> Animals { get; set; }
+        public SQUAD Type { get; set; }     
+        public List<Animal> Animals { get; set; }
     }
 }

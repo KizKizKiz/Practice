@@ -7,6 +7,7 @@ using System.Linq;
 using System.Data.Entity;
 using System.Linq.Expressions;
 using System.Diagnostics;
+using System.Data.Entity.Infrastructure;
 
 namespace DataBinding.Model
 {
@@ -18,11 +19,10 @@ namespace DataBinding.Model
         public DataAccessLayer()
         {
             Entity = Context.Set<T>();
-            Context.Configuration.AutoDetectChangesEnabled = false;
         }
         public IEnumerable<T> Load()
         {
-            return Entity.AsNoTracking();
+            return Entity.ToList();
         }
         public IEnumerable<T> LoadWithInclude(params Expression<Func<T, object>>[] includeProperties)
         {
@@ -34,26 +34,37 @@ namespace DataBinding.Model
             return includeProperties
                 .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
-        public void Attach(T item)
+        public void Replace(T storage, T value)
+        {
+            if (!Entity.Local.Contains(storage)) {
+                throw new ArgumentException("DbSet doesn't contain storage-value");
+            }
+            Remove(storage);
+            Add(value);
+            Context.Entry(value).State = EntityState.Modified;
+        }
+        public void Unchange(T item)
         {
             Context.Entry(item).State = EntityState.Unchanged;
         }
-        public T Save(T item)
+        public void Remove(T item)
         {
-            Context.Entry(item).State = EntityState.Modified;
-            Context.SaveChanges();
-            Context.Entry(item).State = EntityState.Detached;
+            Entity.Remove(item);            
+        }
+        public void Add(T item)
+        {
+            Entity.Add(item);
+            //Context.Entry(item).State = EntityState.Added;
+        }
+        public T Save(T item)
+        {      
+            Context.SaveChanges();                              
             return item;
         }
-        //public void Attach(T item)
-        //{            
-        //    Entity.Attach(item);
-        //}
         public bool HasChanged(T item)
         {
-            Debug.WriteLine($"{item}\n{Context.Entry(item).State}");
-            Context.ChangeTracker.DetectChanges();                        
-            return Context.ChangeTracker.HasChanges();
+            Debug.WriteLine($"{item}\n{Context.Entry(item).State}");            
+            return Context.Entry(item).State== EntityState.Modified;
         }
     }
 }

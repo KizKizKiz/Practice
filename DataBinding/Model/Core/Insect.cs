@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace DataBinding.Core
 {
-    public class Insect:Animal
+    abstract public class Insect:Animal
     {
         private int _feet;        
         /// <summary>

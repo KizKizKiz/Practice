@@ -11,12 +11,11 @@ namespace DataBinding.Core
         spiders = 1,
         lepidoptera = 2
     }
-    public class Animal:IKey
+    abstract public class Animal:IKey
     {
         /// <summary>
         /// Отряд животного
-        /// </summary>
-        public virtual AnimalType AnimalType { get; set; }
+        /// </summary>        
         public SQUAD SquadId { get; set; }
 
         private int _age;
@@ -75,7 +74,8 @@ namespace DataBinding.Core
         /// </summary> 
         public override string ToString()
         {
-            return $"Name:{Name}" +
+            return $"ID:{ID}" +
+                   $"\n\tName:{Name}" +
                    $"\n\tAge:{Age}"+
                    $"\n\tSquad:{SquadId}";
         }

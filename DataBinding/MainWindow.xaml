@@ -25,7 +25,7 @@
         <ListView Grid.Column="0" Grid.Row="1"
                   FontSize="13"
                   Margin="10,0"
-                  ItemsSource="{Binding Animals}"                  
+                  ItemsSource="{Binding Animals, UpdateSourceTrigger=PropertyChanged}"                  
                   SelectedItem="{Binding SelectedAnimal}">
             <ListView.ItemTemplate>
                 <DataTemplate>

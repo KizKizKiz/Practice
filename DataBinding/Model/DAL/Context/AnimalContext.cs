@@ -2,6 +2,7 @@ using System;
 using System.Data.Entity;
 using System.Diagnostics;
 using DataBinding.Core;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace DataBinding.Model.DAL.Context
 {    
     public partial class AnimalContext : DbContext
@@ -19,12 +20,19 @@ namespace DataBinding.Model.DAL.Context
         {
             modelBuilder.Entity<Animal>().
                 HasKey(key => key.ID).
-                ToTable("Animals");
+                ToTable("Animals").
+                Property(m=>m.ID).
+                HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);               
             modelBuilder.Entity<AnimalType>().
                 ToTable("Squads").
                 HasMany(m => m.Animals).
-                WithRequired(m=>m.AnimalType).
-                HasForeignKey(k=>k.SquadId);
+                WithRequired().
+                HasForeignKey(k => k.SquadId);
+            modelBuilder.Entity<AnimalType>().
+                ToTable("Squads").
+                HasKey(m => m.Type).
+                Property(m=>m.Type).
+                HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);          
         }
     }
 }

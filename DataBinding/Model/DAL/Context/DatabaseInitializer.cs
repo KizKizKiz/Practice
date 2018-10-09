@@ -14,8 +14,8 @@ namespace DataBinding.Model.DAL.Context
         protected override void Seed(AnimalContext context)
         {
             List<AnimalType> types = new List<AnimalType>() {
-                new AnimalType() { ID = SQUAD.spiders },
-                new AnimalType() { ID = SQUAD.lepidoptera }
+                new AnimalType() { Type = SQUAD.spiders },
+                new AnimalType() { Type = SQUAD.lepidoptera }
             };
             List<Animal> list = new List<Animal>() {
             new Spider()
@@ -26,8 +26,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 IsRare = true,
                 Name = "Toss",
-                SquadId = types[0].ID,
-                AnimalType = types[0]
+                SquadId = types[0].Type,                
             },
             new Spider()
             {
@@ -37,8 +36,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 IsRare = true,
                 Name = "Affi",
-                SquadId = types[0].ID,
-                AnimalType = types[0]
+                SquadId = types[0].Type,               
             },
             new Butterfly()
             {
@@ -48,8 +46,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 Color = "Black",
                 Name = "Fri",
-                SquadId = types[1].ID,
-                AnimalType = types[1]
+                SquadId = types[1].Type,                
             },
             new Butterfly()
             {
@@ -59,8 +56,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 Color = "Yellow",
                 Name = "Poa",
-                SquadId = types[1].ID,
-                AnimalType = types[1]
+                SquadId = types[1].Type,                
             }};
 
             context.Squads.AddRange(types);

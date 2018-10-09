@@ -25,7 +25,7 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _animal, value);
+                SetProperty(ref _animal, value);                
             }
         }
         /// <summary>
@@ -46,7 +46,7 @@ namespace DataBinding.ViewModel
                 Select(c=>c.SquadId).
                 Distinct().
                 ToList();            
-            SelectedSquad = Animal.SquadId;
+            SelectedSquad = Animal.SquadId;   
             _detailView.ShowDialog();
         }
         private Animal _cachedInsect;
@@ -63,27 +63,37 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _squad, value);               
+                SetProperty(ref _squad, value);              
+
+                Type type = null;
                 switch (_squad) {
                     case SQUAD.spiders: {
                         HideButterfly = Visibility.Collapsed;
                         HideSpider = Visibility.Visible;
-                        TryChangeTypeOfAnimal(typeof(Spider));
+                        type = typeof(Spider);
                         break;
                     }
                     case SQUAD.lepidoptera: {
                         HideButterfly = Visibility.Visible;
                         HideSpider = Visibility.Collapsed;
-                        TryChangeTypeOfAnimal(typeof(Butterfly));
+                        type = typeof(Butterfly);
                         break;
                     }
-                }                           
+                }
+                if (TryChangeTypeOfAnimal(type)) {
+                    _animals.Replace(_cachedInsect, Animal);
+                }
+                else {
+                    _animals.Replace(Animal, _cachedInsect);
+                    _animals.Unchange(Animal);
+                }
+                
             }
         }
         private bool TryChangeTypeOfAnimal(Type type)
         {
             if (_squad == _cachedInsect.SquadId) {
-                Animal = _cachedInsect;
+                Animal = _cachedInsect;                
                 return false;
             }
             var _cachedInsectProperties = _cachedInsect.GetType().GetProperties();
@@ -91,14 +101,13 @@ namespace DataBinding.ViewModel
             var properties = type.GetProperties();
             foreach (var propertyInfo in properties) {
                 var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);                
-                if (prop != null && prop.PropertyType != typeof(AnimalType)) {
+                if (prop != null) {
                     var value = prop.GetValue(_cachedInsect);
                     prop.SetValue(insect, value);
                 }                                
-            }            
-
-            Animal = insect;
-            Animal.AnimalType = _cachedInsect.AnimalType;
+            }
+            insect.SquadId = SelectedSquad;            
+            Animal = insect;           
             return true;
         }
 
