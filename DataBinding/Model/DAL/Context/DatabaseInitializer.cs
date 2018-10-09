@@ -26,7 +26,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 IsRare = true,
                 Name = "Toss",
-                SquadId = types[0].Type,                
+                Squad = types[0].Type,                
             },
             new Spider()
             {
@@ -36,7 +36,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 IsRare = true,
                 Name = "Affi",
-                SquadId = types[0].Type,               
+                Squad = types[0].Type,               
             },
             new Butterfly()
             {
@@ -46,7 +46,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 Color = "Black",
                 Name = "Fri",
-                SquadId = types[1].Type,                
+                Squad = types[1].Type,                
             },
             new Butterfly()
             {
@@ -56,7 +56,7 @@ namespace DataBinding.Model.DAL.Context
                 IsDangerous = true,
                 Color = "Yellow",
                 Name = "Poa",
-                SquadId = types[1].Type,                
+                Squad = types[1].Type,                
             }};
 
             context.Squads.AddRange(types);

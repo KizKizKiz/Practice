@@ -43,10 +43,10 @@ namespace DataBinding.ViewModel
             _animals = context;
             Squads = _animals.              
                 Load().
-                Select(c=>c.SquadId).
+                Select(c=>c.Squad).
                 Distinct().
                 ToList();            
-            SelectedSquad = Animal.SquadId;   
+            SelectedSquad = Animal.Squad;   
             _detailView.ShowDialog();
         }
         private Animal _cachedInsect;
@@ -80,19 +80,14 @@ namespace DataBinding.ViewModel
                         break;
                     }
                 }
-                if (TryChangeTypeOfAnimal(type)) {
-                    _animals.Replace(_cachedInsect, Animal);
-                }
-                else {
-                    _animals.Replace(Animal, _cachedInsect);
-                    _animals.Unchange(Animal);
-                }
+                _cachedInsect.ID = Animal.ID;
+                TryChangeTypeOfAnimal(type);
                 
             }
         }
         private bool TryChangeTypeOfAnimal(Type type)
         {
-            if (_squad == _cachedInsect.SquadId) {
+            if (_squad == _cachedInsect.Squad) {
                 Animal = _cachedInsect;                
                 return false;
             }
@@ -106,7 +101,7 @@ namespace DataBinding.ViewModel
                     prop.SetValue(insect, value);
                 }                                
             }
-            insect.SquadId = SelectedSquad;            
+            insect.Squad = SelectedSquad;            
             Animal = insect;           
             return true;
         }
@@ -118,8 +113,11 @@ namespace DataBinding.ViewModel
             {
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
-                    (obj) => _animals.Save(Animal),
-                    (obj) => _animals.HasChanged(Animal) == true));
+                    (obj) => {
+                        Animal = _animals.Save(Animal, Animal.ID);
+                        _cachedInsect = Animal;
+                    },
+                    (obj) => _animals.HasModifiedOrDetached(Animal)));
             }
         }
         private RelayCommand _cancel;
@@ -129,10 +127,12 @@ namespace DataBinding.ViewModel
             {
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
-                    (obj)=> {                        
-                        _detailView.Close();
+                    (obj)=> {
+                        Animal = _animals.Reload(_cachedInsect);                        
+                        _detailView.Hide();
                     },
-                    null ));
+                    (obj)=> _animals.HasModifiedOrDetached(Animal)));
+
             }
         }
         private List<SQUAD> _squads;

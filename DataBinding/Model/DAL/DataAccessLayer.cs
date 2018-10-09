@@ -20,51 +20,61 @@ namespace DataBinding.Model
         {
             Entity = Context.Set<T>();
         }
+        /// <summary>
+        /// Возвращает список объектов тип <see cref="T"/> загруженных из базы данных
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<T> Load()
         {
-            return Entity.ToList();
-        }
-        public IEnumerable<T> LoadWithInclude(params Expression<Func<T, object>>[] includeProperties)
+            Entity.Load();
+            return Entity.Local;            
+        }      
+        /// <summary>
+        /// Возвращает объект типа <see cref="T"/> из базы данных в неизменном состоянии
+        /// </summary>
+        /// <param name="item">Требуемый аргумент</param>        
+        public T Reload(T item)
         {
-            return Include(includeProperties);
-        }
-        private IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> query = Entity.AsNoTracking();
-            return includeProperties
-                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-        }
-        public void Replace(T storage, T value)
-        {
-            if (!Entity.Local.Contains(storage)) {
-                throw new ArgumentException("DbSet doesn't contain storage-value");
-            }
-            Remove(storage);
-            Add(value);
-            Context.Entry(value).State = EntityState.Modified;
-        }
-        public void Unchange(T item)
-        {
-            Context.Entry(item).State = EntityState.Unchanged;
-        }
-        public void Remove(T item)
-        {
-            Entity.Remove(item);            
-        }
-        public void Add(T item)
-        {
-            Entity.Add(item);
-            //Context.Entry(item).State = EntityState.Added;
-        }
-        public T Save(T item)
-        {      
-            Context.SaveChanges();                              
+            Context.Entry(item).Reload();            
             return item;
         }
-        public bool HasChanged(T item)
+        /// <summary>
+        /// Сохраняет объект в базе данных. 
+        /// В случае не нулевого значения <paramref name="id"/> произойдет поиск
+        /// объекта. Если искомый объект НЕ <see langword="null"/> 
+        /// он удалится и добавится <paramref name="item"/>,
+        /// иначе будет добавлен новый <paramref name="item"/>
+        /// </summary>
+        /// <param name="item">Сохраняемый объект</param>
+        /// <param name="id">Идентификатор объекта</param>
+        /// <returns>Сохраненный объект</returns>
+        public T Save(T item, int id=0)
         {
-            Debug.WriteLine($"{item}\n{Context.Entry(item).State}");            
-            return Context.Entry(item).State== EntityState.Modified;
+            if (Context.Entry(item).State== EntityState.Modified) {
+                Context.SaveChanges();
+                return item;
+            }
+            var elementById = Entity.Find(id);            
+            if (elementById != null) {                
+                Entity.Remove(elementById);
+                Entity.Add(item);
+                Context.SaveChanges();
+                return item;
+            }
+            Context.Entry(item).State = EntityState.Added;
+            Context.SaveChanges();
+            return item;
+        }
+        /// <summary>
+        /// Возвращает <see langword="true"/> если объект изменен или не отслеживается контекстом,
+        /// иначе <see langword="false"/>
+        /// </summary>
+        /// <param name="item">Проверяемый объект</param>
+        
+        public bool HasModifiedOrDetached(T item)
+        {            
+            return Context.Entry(item).State == EntityState.Detached ||
+                Context.Entry(item).State == EntityState.Modified;
         }
     }
 }

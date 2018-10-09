@@ -12,6 +12,7 @@ using System.Reflection;
 using DataBinding.Core;
 using DataBinding.Model;
 using DataBinding.Model.DAL;
+using System.Diagnostics;
 
 namespace DataBinding.ViewModel
 {
@@ -80,14 +81,15 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _selectedAnimal, value);
+                Debug.Write(_selectedAnimal);
             }
         }
 
-        private List<Animal> _animals;
+        private ObservableCollection<Animal> _animals;
         /// <summary>
         /// Получает/задает коллекцию животных 
         /// </summary>
-        public List<Animal> Animals
+        public ObservableCollection<Animal> Animals
         {
             get
             {
@@ -104,7 +106,7 @@ namespace DataBinding.ViewModel
             var colorsName = _propertiesOfColors.Select((color) => color.Name);
             Colors = new List<string>(colorsName);
             _essential = new DBAnimal();            
-            Animals = _essential.Load().ToList();       
+            Animals = _essential.Load() as ObservableCollection<Animal>;       
         }        
     }
 }
