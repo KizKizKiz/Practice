@@ -80,8 +80,7 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _selectedAnimal, value);
-                Debug.Write(_selectedAnimal);
+                SetProperty(ref _selectedAnimal, value);                
             }
         }
 
@@ -106,7 +105,10 @@ namespace DataBinding.ViewModel
             var colorsName = _propertiesOfColors.Select((color) => color.Name);
             Colors = new List<string>(colorsName);
             _essential = new DBAnimal();            
-            Animals = _essential.Load() as ObservableCollection<Animal>;       
+            Animals = _essential.Load() as ObservableCollection<Animal>;
+            Animals.CollectionChanged += (sen, arg) => {
+                Debug.Write("EVENT:"+arg.Action);
+            };
         }        
     }
 }
