@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Windows;
 using DataBinding.ViewModel;
 namespace DataBinding.View
@@ -16,7 +15,6 @@ namespace DataBinding.View
             InitializeComponent();
             
         }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;

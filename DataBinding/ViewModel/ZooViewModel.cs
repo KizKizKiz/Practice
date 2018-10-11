@@ -66,7 +66,7 @@ namespace DataBinding.ViewModel
                 return _detail ??
                     (_detail = new RelayCommand("Детально",
                     (obj) => {
-                        SelectedAnimal.DetailView.Show();
+                        SelectedAnimal.DetailView.ShowDialog();
                         },
                     (obj) => SelectedAnimal != null));
             }
@@ -105,8 +105,7 @@ namespace DataBinding.ViewModel
         public ZooViewModel()
         {
             _propertiesOfColors = typeof(Colors).GetProperties();
-            var colorsName = _propertiesOfColors.Select((color) => color.Name);
-            Colors = new List<string>(colorsName);
+            Colors = _propertiesOfColors.Select((color) => color.Name).ToList();            
             _essential = new DBAnimal();
 
             var animals = _essential.Load().ToList();

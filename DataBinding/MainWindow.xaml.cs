@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using DataBinding.ViewModel;
@@ -10,6 +11,10 @@ namespace DataBinding
         {
             InitializeComponent();
             DataContext = new ZooViewModel(); 
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {            
+            Application.Current.Shutdown();
         }
     }
 }

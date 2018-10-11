@@ -79,7 +79,6 @@ namespace DataBinding.ViewModel
                 }
                 _cachedInsect.ID = Animal.ID;
                 TryChangeTypeOfAnimal(type);
-
             }
         }
         private bool TryChangeTypeOfAnimal(Type type)
@@ -129,7 +128,6 @@ namespace DataBinding.ViewModel
                         DetailView.Hide();
                     },
                     (obj) => _animals.HasModifiedOrDetached(Animal)));
-
             }
         }
         private List<SQUAD> _squads;
