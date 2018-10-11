@@ -16,6 +16,20 @@ namespace DataBinding.ViewModel
     {
         public Window DetailView { get; }
         private DBAnimal _animals;
+
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                SetProperty(ref _name, value);
+                Animal.Name = _name;
+            }
+        }
         private Animal _animal;
         public Animal Animal
         {
@@ -26,6 +40,7 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _animal, value);
+                Name = Animal.Name;
             }
         }
         /// <summary>
@@ -42,9 +57,9 @@ namespace DataBinding.ViewModel
                 Distinct().
                 ToList();
             SelectedSquad = Animal.Squad;
-
+            Name = Animal.Name;
             DetailView = new DetailView();
-            DetailView.DataContext = this;            
+            DetailView.DataContext = this;
         }
         private Animal _cachedInsect;
 

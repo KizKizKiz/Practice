@@ -28,12 +28,13 @@
                   SelectedItem="{Binding SelectedAnimal}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel DataContext="{Binding Animal}">
+                    <StackPanel>
                         <TextBlock Text="{Binding StringFormat=Имя: {0},
-                            Path=Name,                             
+                            Path=Name, 
+                            UpdateSourceTrigger=PropertyChanged,
                             Mode=TwoWay}"/>
                         <TextBlock Text="{Binding StringFormat=Тип: {0},
-                            Path=Squad}"/>
+                            Path=Animal.Squad}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
