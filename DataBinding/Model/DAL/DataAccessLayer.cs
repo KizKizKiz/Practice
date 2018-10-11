@@ -26,8 +26,7 @@ namespace DataBinding.Model
         /// <returns></returns>
         public IEnumerable<T> Load()
         {
-            Entity.Load();
-            return Entity.Local;            
+            return Entity;            
         }      
         /// <summary>
         /// Возвращает объект типа <see cref="T"/> из базы данных в неизменном состоянии

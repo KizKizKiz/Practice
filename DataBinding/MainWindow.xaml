@@ -23,15 +23,18 @@
         <ListView Grid.Column="0" Grid.Row="1"
                   FontSize="13"
                   Margin="10,0"
-                  ItemsSource="{Binding Animals}"                  
+                  ItemsSource="{Binding Animals, 
+            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"                  
                   SelectedItem="{Binding SelectedAnimal}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding StringFormat=Имя: {0},
-                            Path=Name, UpdateSourceTrigger=PropertyChanged}"/>
+                            Path=Animal.Name, 
+                            UpdateSourceTrigger=PropertyChanged,
+                            Mode=TwoWay}"/>
                         <TextBlock Text="{Binding StringFormat=Тип: {0},
-                            Path=Squad}"/>
+                            Path=Animal.Squad}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

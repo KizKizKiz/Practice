@@ -14,8 +14,8 @@ namespace DataBinding.ViewModel
 {
     class AnimalDetailViewModel : ViewModelBase
     {
+        public Window DetailView { get; }
         private DBAnimal _animals;
-
         private Animal _animal;
         public Animal Animal
         {
@@ -25,29 +25,26 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _animal, value);                
+                SetProperty(ref _animal, value);
             }
         }
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
-        private DetailView _detailView;
         public AnimalDetailViewModel(Animal animal, DBAnimal context)
-        {            
-            _detailView = new DetailView()
-            {
-                DataContext = this
-            };
+        {
             Animal = animal;
-            _cachedInsect =  _animal;
+            _cachedInsect = _animal;
             _animals = context;
-            Squads = _animals.              
+            Squads = _animals.
                 Load().
-                Select(c=>c.Squad).
+                Select(c => c.Squad).
                 Distinct().
-                ToList();            
-            SelectedSquad = Animal.Squad;   
-            _detailView.ShowDialog();
+                ToList();
+            SelectedSquad = Animal.Squad;
+
+            DetailView = new DetailView();
+            DetailView.DataContext = this;            
         }
         private Animal _cachedInsect;
 
@@ -63,7 +60,7 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _squad, value);              
+                SetProperty(ref _squad, value);
 
                 Type type = null;
                 switch (_squad) {
@@ -82,27 +79,27 @@ namespace DataBinding.ViewModel
                 }
                 _cachedInsect.ID = Animal.ID;
                 TryChangeTypeOfAnimal(type);
-                
+
             }
         }
         private bool TryChangeTypeOfAnimal(Type type)
         {
             if (_squad == _cachedInsect.Squad) {
-                Animal = _cachedInsect;                
+                Animal = _cachedInsect;
                 return false;
             }
             var _cachedInsectProperties = _cachedInsect.GetType().GetProperties();
-            var insect = (Animal) Activator.CreateInstance(type);            
+            var insect = (Animal) Activator.CreateInstance(type);
             var properties = type.GetProperties();
             foreach (var propertyInfo in properties) {
-                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);                
+                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
                 if (prop != null) {
                     var value = prop.GetValue(_cachedInsect);
                     prop.SetValue(insect, value);
-                }                                
+                }
             }
-            insect.Squad = SelectedSquad;            
-            Animal = insect;           
+            insect.Squad = SelectedSquad;
+            Animal = insect;
             return true;
         }
 
@@ -127,11 +124,11 @@ namespace DataBinding.ViewModel
             {
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
-                    (obj)=> {
-                        Animal = _animals.Reload(_cachedInsect);                        
-                        _detailView.Hide();
+                    (obj) => {
+                        Animal = _animals.Reload(_cachedInsect);
+                        DetailView.Hide();
                     },
-                    (obj)=> _animals.HasModifiedOrDetached(Animal)));
+                    (obj) => _animals.HasModifiedOrDetached(Animal)));
 
             }
         }

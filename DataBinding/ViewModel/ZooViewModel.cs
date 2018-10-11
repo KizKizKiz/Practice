@@ -13,6 +13,7 @@ using DataBinding.Core;
 using DataBinding.Model;
 using DataBinding.Model.DAL;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace DataBinding.ViewModel
 {
@@ -64,15 +65,17 @@ namespace DataBinding.ViewModel
             {
                 return _detail ??
                     (_detail = new RelayCommand("Детально",
-                    (obj) => new AnimalDetailViewModel(SelectedAnimal, _essential),
+                    (obj) => {
+                        SelectedAnimal.DetailView.Show();
+                        },
                     (obj) => SelectedAnimal != null));
             }
-        }        
-        private Animal _selectedAnimal;
+        }
+        private AnimalDetailViewModel _selectedAnimal;
         /// <summary>
         /// Получает/задает выбранное животное
         /// </summary>
-        public Animal SelectedAnimal
+        public AnimalDetailViewModel SelectedAnimal
         {
             get
             {
@@ -84,11 +87,11 @@ namespace DataBinding.ViewModel
             }
         }
 
-        private ObservableCollection<Animal> _animals;
+        private List<ViewModelBase> _animals;
         /// <summary>
         /// Получает/задает коллекцию животных 
         /// </summary>
-        public ObservableCollection<Animal> Animals
+        public List<ViewModelBase> Animals
         {
             get
             {
@@ -104,11 +107,13 @@ namespace DataBinding.ViewModel
             _propertiesOfColors = typeof(Colors).GetProperties();
             var colorsName = _propertiesOfColors.Select((color) => color.Name);
             Colors = new List<string>(colorsName);
-            _essential = new DBAnimal();            
-            Animals = _essential.Load() as ObservableCollection<Animal>;
-            Animals.CollectionChanged += (sen, arg) => {
-                Debug.Write("EVENT:"+arg.Action);
-            };
-        }        
+            _essential = new DBAnimal();
+
+            var animals = _essential.Load().ToList();
+            Animals = new List<ViewModelBase>();                        
+            for (int i = 0; i < animals.Count; i++) {
+                Animals.Add(new AnimalDetailViewModel(animals[i], _essential));
+            }           
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace DataBinding.Core
         spiders = 1,
         lepidoptera = 2
     }
-    abstract public class Animal: ViewModel.ViewModelBase, IKey
+    abstract public class Animal: IKey
     {
         /// <summary>
         /// Отряд животного
@@ -44,8 +44,8 @@ namespace DataBinding.Core
             {
                 if (string.IsNullOrWhiteSpace(value)) {
                     throw new ArgumentException("Name cannot be null or contains only white space");
-                }                
-                SetProperty(ref _name, value );
+                }
+                _name = value;
             }
         }
         /// <summary>

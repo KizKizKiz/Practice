@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DataBinding.View"
       mc:Ignorable="d"       
       Title="Детальная информация"     
-      WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+      WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Closing="Window_Closing">
 
     <Window.Resources>
         <Style x:Key="DefaultTxtBlock" TargetType="{x:Type TextBlock}">
