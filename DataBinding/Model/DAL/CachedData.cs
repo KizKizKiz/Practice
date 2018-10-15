@@ -4,11 +4,16 @@ using System.Collections;
 using System.Data.SqlClient;
 using System.Linq;
 using DataBinding.Core;
+using System.Data.Entity;
 
 namespace DataBinding.Model
 {
     abstract class CachedData<T> : DataAccessLayer<T> where T : class, IKey
     {
+        public CachedData(DbContext context)
+            :base(context)
+        {
+        }
         /// <summary>
         /// Кэшированные данные
         /// </summary>
@@ -23,7 +28,7 @@ namespace DataBinding.Model
         {
             if (!_cachedData.TryGetValue(id, out T element)) {
                 if (element == null) {
-                    element = Load().
+                    element = LazyLoadTable().
                               FirstOrDefault(elem => elem.ID == id);
                     _cachedData.Add(id, element);
                 }

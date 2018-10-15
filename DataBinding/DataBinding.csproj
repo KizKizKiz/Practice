@@ -87,6 +87,7 @@
     <Compile Include="Model\DAL\Context\DatabaseInitializer.cs" />
     <Compile Include="Model\DAL\DataAccessLayer.cs" />
     <Compile Include="Model\DAL\DBAnimal.cs" />
+    <Compile Include="Model\DAL\DBSquad.cs" />
     <Compile Include="ViewModel\AnimalDetailViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

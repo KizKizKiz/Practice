@@ -12,9 +12,5 @@ namespace DataBinding
             InitializeComponent();
             DataContext = new ZooViewModel(); 
         }
-        protected override void OnClosing(CancelEventArgs e)
-        {            
-            Application.Current.Shutdown();
-        }
     }
 }

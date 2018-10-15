@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:DataBinding.View"
       mc:Ignorable="d"       
       Title="Детальная информация"     
-      WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Closing="Window_Closing">
+      WindowStartupLocation="CenterScreen" 
+      SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <Style x:Key="DefaultTxtBlock" TargetType="{x:Type TextBlock}">
@@ -75,7 +76,7 @@
 
         <TextBox Grid.Row="1" Grid.Column="1"                 
                  Style="{StaticResource DefaultTxtBox}"
-                 Text="{Binding Path=Animal.Name}"/>
+                 Text="{Binding Path=Name}"/>
         <TextBox Grid.Row="2" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Text="{Binding Path=Animal.Age}"/>

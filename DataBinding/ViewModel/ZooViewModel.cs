@@ -14,11 +14,13 @@ using DataBinding.Model;
 using DataBinding.Model.DAL;
 using System.Diagnostics;
 using System.ComponentModel;
+using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
     class ZooViewModel : ViewModelBase
     {
+        private AnimalContext _context;
         private DBAnimal _essential;
         private PropertyInfo[] _propertiesOfColors;
         private List<string> _colors;
@@ -66,6 +68,7 @@ namespace DataBinding.ViewModel
                 return _detail ??
                     (_detail = new RelayCommand("Детально",
                     (obj) => {
+                        SelectedAnimal.DetailView = new DetailView();
                         SelectedAnimal.DetailView.ShowDialog();
                         },
                     (obj) => SelectedAnimal != null));
@@ -83,10 +86,10 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _selectedAnimal, value);                
+                SetProperty(ref _selectedAnimal, value);
+                Debug.WriteLine(_selectedAnimal.Animal);
             }
-        }
-
+        }   
         private List<ViewModelBase> _animals;
         /// <summary>
         /// Получает/задает коллекцию животных 
@@ -104,15 +107,13 @@ namespace DataBinding.ViewModel
         }
         public ZooViewModel()
         {
+            _context = new AnimalContext();
             _propertiesOfColors = typeof(Colors).GetProperties();
             Colors = _propertiesOfColors.Select((color) => color.Name).ToList();            
-            _essential = new DBAnimal();
+            _essential = new DBAnimal(_context);
 
-            var animals = _essential.Load().ToList();
-            Animals = new List<ViewModelBase>();                        
-            for (int i = 0; i < animals.Count; i++) {
-                Animals.Add(new AnimalDetailViewModel(animals[i], _essential));
-            }           
+            Animals = _essential.LazyLoadTable().ToList().
+                Select(s => new AnimalDetailViewModel(s, _essential)).ToList<ViewModelBase>();
         }
     }
 }

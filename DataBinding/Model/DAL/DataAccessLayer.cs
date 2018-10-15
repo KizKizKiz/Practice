@@ -13,18 +13,20 @@ namespace DataBinding.Model
 {
     abstract class DataAccessLayer<T> where T : class
     {
-        private protected DbContext _context;
-        protected abstract DbContext Context { get; }
-        protected DbSet<T> Entity { get; set; }
-        public DataAccessLayer()
+        public DbContext Context { get; }
+
+        private DbSet<T> Entity { get; set; }
+        public DataAccessLayer(DbContext context)
         {
+            Context = context;
             Entity = Context.Set<T>();
         }
         /// <summary>
-        /// Возвращает список объектов тип <see cref="T"/> загруженных из базы данных
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<T> Load()
+        /// Возвращает коллекцию всех сущностей типа <see cref="T"/>, которые
+        /// запрашиваются из таблицы базы данных. 
+        /// При первом вызове сущности загружает всю таблицу в контекст данных.
+        /// </summary>        
+        public IEnumerable<T> LazyLoadTable()
         {
             return Entity;            
         }      

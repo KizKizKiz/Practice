@@ -14,20 +14,30 @@ namespace DataBinding.ViewModel
 {
     class AnimalDetailViewModel : ViewModelBase
     {
-        public Window DetailView { get; }
-        private DBAnimal _animals;
-
-        private string _name;
+        private Window _detailView;
+        public Window DetailView
+        {
+            get { return _detailView; }
+            set
+            {
+                _detailView = value;
+                _detailView.DataContext = this;
+            }
+        }
+        private DBSquad _dbSquads;
+        private DBAnimal _dbAnimals;
         public string Name
         {
             get
             {
-                return _name;
+                return Animal.Name;
             }
             set
             {
-                SetProperty(ref _name, value);
-                Animal.Name = _name;
+                var name = Animal.Name;
+                
+                SetProperty(ref name, value);
+                Animal.Name = name;
             }
         }
         private Animal _animal;
@@ -39,27 +49,24 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _animal, value);
-                Name = Animal.Name;
+                SetProperty(ref _animal, value);                
             }
-        }
+        }        
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
         public AnimalDetailViewModel(Animal animal, DBAnimal context)
-        {
+        {            
+            _dbSquads = new DBSquad(context.Context);
+            Squads = _dbSquads.
+                LazyLoadTable().
+                Select(c => c.Type).
+                ToList();
+
             Animal = animal;
             _cachedInsect = _animal;
-            _animals = context;
-            Squads = _animals.
-                Load().
-                Select(c => c.Squad).
-                Distinct().
-                ToList();
-            SelectedSquad = Animal.Squad;
-            Name = Animal.Name;
-            DetailView = new DetailView();
-            DetailView.DataContext = this;
+            _dbAnimals = context;
+            SelectedSquad = Animal.Squad;            
         }
         private Animal _cachedInsect;
 
@@ -125,10 +132,10 @@ namespace DataBinding.ViewModel
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
                     (obj) => {
-                        Animal = _animals.Save(Animal, Animal.ID);
+                        _dbAnimals.Save(Animal, Animal.ID);
                         _cachedInsect = Animal;
                     },
-                    (obj) => _animals.HasModifiedOrDetached(Animal)));
+                    (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
             }
         }
         private RelayCommand _cancel;
@@ -139,10 +146,11 @@ namespace DataBinding.ViewModel
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
                     (obj) => {
-                        Animal = _animals.Reload(_cachedInsect);
-                        DetailView.Hide();
+                        //Animal = _dbAnimals.Reload(_cachedInsect);
+                        Animal.Name = "TRAR";
+                        DetailView.Close();
                     },
-                    (obj) => _animals.HasModifiedOrDetached(Animal)));
+                    (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
             }
         }
         private List<SQUAD> _squads;

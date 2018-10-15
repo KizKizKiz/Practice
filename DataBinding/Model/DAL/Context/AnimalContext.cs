@@ -25,7 +25,8 @@ namespace DataBinding.Model.DAL.Context
             
             modelBuilder.Entity<AnimalType>().
                 HasKey(m=>m.Type).
-                ToTable("Squads").                
+                ToTable("Squads").  
+                Ignore(m=>m.ID).
                 HasMany(m => m.Animals).
                 WithRequired().
                 HasForeignKey(k => k.Squad);                 

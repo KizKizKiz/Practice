@@ -7,15 +7,9 @@ namespace DataBinding.Model.DAL
 {
     class DBAnimal : CachedData<Animal>
     {
-        protected override DbContext Context
-        {
-            get
-            {
-                if (_context==null) {
-                    _context = new AnimalContext();
-                }
-                return _context;
-            }
+        public DBAnimal(AnimalContext context)
+            :base(context)
+        {            
         }
     }
 }
