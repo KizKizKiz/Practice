@@ -1,6 +1,6 @@
---Запрос, который выводит название товара,
---название типа и название производителя тех товаров,
---цена которых больше 5000
+--Р—Р°РїСЂРѕСЃ, РєРѕС‚РѕСЂС‹Р№ РІС‹РІРѕРґРёС‚ РЅР°Р·РІР°РЅРёРµ С‚РѕРІР°СЂР°,
+--РЅР°Р·РІР°РЅРёРµ С‚РёРїР° Рё РЅР°Р·РІР°РЅРёРµ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЏ С‚РµС… С‚РѕРІР°СЂРѕРІ,
+--С†РµРЅР° РєРѕС‚РѕСЂС‹С… Р±РѕР»СЊС€Рµ 5000
 SELECT ITEM.Name, 
 	(SELECT TYPE.Name 
 	FROM TYPE
@@ -9,20 +9,20 @@ SELECT ITEM.Name,
 FROM ITEM
 WHERE ITEM.Price > 5000
 
---Запрос выводит минимальную цену всех товаров.(просто число)
+--Р—Р°РїСЂРѕСЃ РІС‹РІРѕРґРёС‚ РјРёРЅРёРјР°Р»СЊРЅСѓСЋ С†РµРЅСѓ РІСЃРµС… С‚РѕРІР°СЂРѕРІ.(РїСЂРѕСЃС‚Рѕ С‡РёСЃР»Рѕ)
 SELECT MIN(PRICE) AS 'Min. price'
 FROM ITEM
 
---Запрос выводит минимальную цену для каждого типа товара.
---(название типа, мин. цена)
+--Р—Р°РїСЂРѕСЃ РІС‹РІРѕРґРёС‚ РјРёРЅРёРјР°Р»СЊРЅСѓСЋ С†РµРЅСѓ РґР»СЏ РєР°Р¶РґРѕРіРѕ С‚РёРїР° С‚РѕРІР°СЂР°.
+--(РЅР°Р·РІР°РЅРёРµ С‚РёРїР°, РјРёРЅ. С†РµРЅР°)
 SELECT TYPE.Name,
 	(SELECT MIN(PRICE)
 	FROM ITEM
 	WHERE ITEM.TypeId=TYPE.ID) AS 'Min.price'
 FROM TYPE
 
---Запрос выводит минимальную цену для каждого типа товара,
- --сумма цен которых больше 20000
+--Р—Р°РїСЂРѕСЃ РІС‹РІРѕРґРёС‚ РјРёРЅРёРјР°Р»СЊРЅСѓСЋ С†РµРЅСѓ РґР»СЏ РєР°Р¶РґРѕРіРѕ С‚РёРїР° С‚РѕРІР°СЂР°,
+ --СЃСѓРјРјР° С†РµРЅ РєРѕС‚РѕСЂС‹С… Р±РѕР»СЊС€Рµ 20000
 SELECT TYPE.Name,
 	(SELECT MIN(PRICE)
 	FROM ITEM
@@ -31,9 +31,9 @@ FROM TYPE
 WHERE 20000<(SELECT SUM(PRICE)
 			FROM ITEM 
 			WHERE TYPE.ID=ITEM.TypeId)
-
---Запрос выводит количество складов для каждого менеджера 
---(имя менеджера, количество)
+			 
+--Р—Р°РїСЂРѕСЃ РІС‹РІРѕРґРёС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРєР»Р°РґРѕРІ РґР»СЏ РєР°Р¶РґРѕРіРѕ РјРµРЅРµРґР¶РµСЂР° 
+--(РёРјСЏ РјРµРЅРµРґР¶РµСЂР°, РєРѕР»РёС‡РµСЃС‚РІРѕ)
 SELECT 
 	(SELECT MANAGER.Name
 		FROM MANAGER 
@@ -42,9 +42,9 @@ SELECT
 FROM WAREHOUSE
 INNER JOIN MANAGER ON WAREHOUSE.ManagerID=MANAGER.ID
 GROUP BY WAREHOUSE.ManagerID
-
---Запрос выводит менеджеров, чьи склады обслуживают более одного магазина.
---(имя менеджера)
+  
+--Р—Р°РїСЂРѕСЃ РІС‹РІРѕРґРёС‚ РјРµРЅРµРґР¶РµСЂРѕРІ, С‡СЊРё СЃРєР»Р°РґС‹ РѕР±СЃР»СѓР¶РёРІР°СЋС‚ Р±РѕР»РµРµ РѕРґРЅРѕРіРѕ РјР°РіР°Р·РёРЅР°.
+--(РёРјСЏ РјРµРЅРµРґР¶РµСЂР°)
 SELECT 
 	(SELECT SubMAN.Name 
 	FROM MANAGER AS SubMAN 
@@ -55,7 +55,7 @@ JOIN WarehousesShops ON WarehousesShops.WarehouseId=WAREHOUSE.ID
 GROUP BY WAREHOUSE.ID, MAN.ID
 HAVING COUNT(WAREHOUSE.ID)>1
 
---Вывести топ 3 менеджеров на чьих складах большее количество товаров.
+--Р’С‹РІРµСЃС‚Рё С‚РѕРї 3 РјРµРЅРµРґР¶РµСЂРѕРІ РЅР° С‡СЊРёС… СЃРєР»Р°РґР°С… Р±РѕР»СЊС€РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂРѕРІ.
 SELECT TOP 3
 	(SELECT SubMan.Name 
 	FROM MANAGER AS SubMan 
@@ -66,15 +66,15 @@ JOIN WarehousesProducts ON WarehousesProducts.WarehouseId=WAREHOUSE.ID
 GROUP BY MAN.ID
 ORDER BY SUM(WarehousesProducts.ItemsCount) DESC
 
---Увеличить на 1 количество всех товаров на складах
---с именем товара «FISTASHKA» и 
---которые обслуживают магазины с именем «Верный»
+--РЈРІРµР»РёС‡РёС‚СЊ РЅР° 1 РєРѕР»РёС‡РµСЃС‚РІРѕ РІСЃРµС… С‚РѕРІР°СЂРѕРІ РЅР° СЃРєР»Р°РґР°С…
+--СЃ РёРјРµРЅРµРј С‚РѕРІР°СЂР° В«FISTASHKAВ» Рё 
+--РєРѕС‚РѕСЂС‹Рµ РѕР±СЃР»СѓР¶РёРІР°СЋС‚ РјР°РіР°Р·РёРЅС‹ СЃ РёРјРµРЅРµРј В«Р’РµСЂРЅС‹Р№В»
 
 UPDATE WarehousesProducts
 SET WarehousesProducts.ItemsCount=ItemsCount+1
 FROM ITEM, WarehousesShops, SHOP
 WHERE ITEM.Name='FISTASHKA' 
 	AND ITEM.ID=WarehousesProducts.ItemId 
-	AND SHOP.Name='Верный'
+	AND SHOP.Name='Р’РµСЂРЅС‹Р№'
 	and WarehousesShops.ShopId=SHOP.ID
 	AND WarehousesProducts.WarehouseId=WarehousesShops.WarehouseId		
