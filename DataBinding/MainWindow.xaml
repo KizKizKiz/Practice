@@ -30,7 +30,8 @@
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding StringFormat=Имя: {0},                                   
-                            Path=Name}"/>
+                            Path=Name, UpdateSourceTrigger=PropertyChanged,
+                            Mode=TwoWay}"/>
                         <TextBlock Text="{Binding StringFormat=Тип: {0},
                             Path=Animal.Squad}"/>
                     </StackPanel>

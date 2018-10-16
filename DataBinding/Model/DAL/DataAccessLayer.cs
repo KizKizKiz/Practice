@@ -55,7 +55,8 @@ namespace DataBinding.Model
                 Context.SaveChanges();
                 return item;
             }
-            var elementById = Entity.Find(id);            
+            var elementById = Entity.Find(id);
+            var properties = elementById.GetType().GetProperties();
             if (elementById != null) {                
                 Entity.Remove(elementById);
                 Entity.Add(item);
@@ -66,12 +67,12 @@ namespace DataBinding.Model
             Context.SaveChanges();
             return item;
         }
+        
         /// <summary>
         /// Возвращает <see langword="true"/> если объект изменен или не отслеживается контекстом,
         /// иначе <see langword="false"/>
         /// </summary>
-        /// <param name="item">Проверяемый объект</param>
-        
+        /// <param name="item">Проверяемый объект</param>        
         public bool HasModifiedOrDetached(T item)
         {            
             return Context.Entry(item).State == EntityState.Detached ||

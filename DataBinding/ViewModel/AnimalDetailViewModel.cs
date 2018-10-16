@@ -26,18 +26,17 @@ namespace DataBinding.ViewModel
         }
         private DBSquad _dbSquads;
         private DBAnimal _dbAnimals;
+        private string _name;
         public string Name
         {
             get
             {
-                return Animal.Name;
+                return _name;
             }
             set
-            {
-                var name = Animal.Name;
-                
-                SetProperty(ref name, value);
-                Animal.Name = name;
+            {                               
+                SetProperty(ref _name, value);
+                Animal.Name = _name;
             }
         }
         private Animal _animal;
@@ -49,7 +48,8 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _animal, value);                
+                SetProperty(ref _animal, value);
+                Name = Animal.Name;
             }
         }        
         /// <summary>
@@ -66,7 +66,8 @@ namespace DataBinding.ViewModel
             Animal = animal;
             _cachedInsect = _animal;
             _dbAnimals = context;
-            SelectedSquad = Animal.Squad;            
+            SelectedSquad = Animal.Squad;
+            Name = Animal.Name;
         }
         private Animal _cachedInsect;
 
@@ -146,8 +147,8 @@ namespace DataBinding.ViewModel
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
                     (obj) => {
-                        //Animal = _dbAnimals.Reload(_cachedInsect);
-                        Animal.Name = "TRAR";
+                        Animal = _dbAnimals.Reload(_cachedInsect);
+                        //Animal.Name = "TRAR";
                         DetailView.Close();
                     },
                     (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
