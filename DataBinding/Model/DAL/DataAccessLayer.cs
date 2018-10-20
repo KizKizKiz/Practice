@@ -61,10 +61,18 @@ namespace DataBinding.Model
             Debug.WriteLine(Context.Entry(item).State);
             return Context.Entry(item).State == EntityState.Modified;
         }
+        /// <summary>
+        /// Добавляет элемент для отслеживания контекстом данных и устанавливает состояние в неизменное.
+        /// При изменении объекта метод SaveChanges() сгенерирует SQL запрос c изменениями объекта в базе данных
+        /// </summary>        
         public void Attach(T item)
         {
             Context.Entry(item).State = EntityState.Unchanged;
         }
+        /// <summary>
+        /// Удаляет элемент из отслеживания контекстом данных.
+        /// При изменении неотслеживаемого объекта метод SaveChanges() НЕ будет генерировать SQL запрос с изменениями к базе данных
+        /// </summary>        
         public void Dettach(T item)
         {
             Context.Entry(item).State = EntityState.Detached;
