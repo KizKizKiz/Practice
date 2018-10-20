@@ -76,7 +76,7 @@
 
         <TextBox Grid.Row="1" Grid.Column="1"                 
                  Style="{StaticResource DefaultTxtBox}"
-                 Text="{Binding Path=Animal.Name}"/>
+                 Text="{Binding Name}"/>
         <TextBox Grid.Row="2" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Text="{Binding Path=Animal.Age}"/>

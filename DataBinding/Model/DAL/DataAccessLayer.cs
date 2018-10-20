@@ -40,31 +40,14 @@ namespace DataBinding.Model
             return item;
         }
         /// <summary>
-        /// Сохраняет объект в базе данных. 
-        /// В случае не нулевого значения <paramref name="id"/> произойдет поиск
-        /// объекта. Если искомый объект НЕ <see langword="null"/> 
-        /// он удалится и добавится <paramref name="item"/>,
-        /// иначе будет добавлен новый <paramref name="item"/>
+        /// Сохраняет объект в таблице базы данных.                
         /// </summary>
-        /// <param name="item">Сохраняемый объект</param>
-        /// <param name="id">Идентификатор объекта</param>
+        /// <param name="item">Сохраняемый объект</param>        
         /// <returns>Сохраненный объект</returns>
-        public T Save(T item, int id=0)
+        public T Save(T item)
         {
-            if (Context.Entry(item).State== EntityState.Modified) {
-                Context.SaveChanges();
-                return item;
-            }
-            var elementById = Entity.Find(id);
-            var properties = elementById.GetType().GetProperties();
-            if (elementById != null) {                
-                Entity.Remove(elementById);
-                Entity.Add(item);
-                Context.SaveChanges();
-                return item;
-            }
-            Context.Entry(item).State = EntityState.Added;
-            Context.SaveChanges();
+            Context.Entry(item).State = EntityState.Modified;
+            Context.SaveChanges();                            
             return item;
         }
         
@@ -74,9 +57,17 @@ namespace DataBinding.Model
         /// </summary>
         /// <param name="item">Проверяемый объект</param>        
         public bool HasModifiedOrDetached(T item)
-        {            
-            return Context.Entry(item).State == EntityState.Detached ||
-                Context.Entry(item).State == EntityState.Modified;
+        {
+            Debug.WriteLine(Context.Entry(item).State);
+            return Context.Entry(item).State == EntityState.Modified;
+        }
+        public void Attach(T item)
+        {
+            Context.Entry(item).State = EntityState.Unchanged;
+        }
+        public void Dettach(T item)
+        {
+            Context.Entry(item).State = EntityState.Detached;
         }
     }
 }

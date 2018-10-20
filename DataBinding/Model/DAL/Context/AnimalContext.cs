@@ -19,7 +19,13 @@ namespace DataBinding.Model.DAL.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Animal>().
-                ToTable("Animals").                
+                ToTable("Animals").
+                Map<Spider>(m => {
+                    m.Requires("Discr").HasValue("Sp");
+                }).
+                Map<Butterfly>(m => {
+                    m.Requires("Discr").HasValue("But");
+                }).
                 Property(m=>m.ID).
                 HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             

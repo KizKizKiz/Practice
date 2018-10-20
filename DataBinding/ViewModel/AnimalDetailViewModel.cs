@@ -26,17 +26,17 @@ namespace DataBinding.ViewModel
         }
         private DBSquad _dbSquads;
         private DBAnimal _dbAnimals;
-        private string _name;
         public string Name
         {
             get
             {
-                return _name;
+                return Animal.Name;
             }
             set
-            {                               
-                SetProperty(ref _name, value);
-                Animal.Name = _name;
+            {
+                var name = Animal.Name;
+                Animal.Name = value;
+                SetProperty(ref name, value);
             }
         }
         private Animal _animal;
@@ -48,28 +48,26 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _animal, value);
-                Name = Animal.Name;
+                SetProperty(ref _animal, value);                
             }
-        }        
+        }
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
         public AnimalDetailViewModel(Animal animal, DBAnimal context)
-        {            
+        {
             _dbSquads = new DBSquad(context.Context);
+            _dbAnimals = context;
+
             Squads = _dbSquads.
                 LazyLoadTable().
                 Select(c => c.Type).
                 ToList();
-
             Animal = animal;
-            _cachedInsect = _animal;
-            _dbAnimals = context;
+            _cachedAnimal = Serialize(animal.GetType(), Animal);
             SelectedSquad = Animal.Squad;
-            Name = Animal.Name;
         }
-        private Animal _cachedInsect;
+        private Animal _cachedAnimal;
 
         private SQUAD _squad;
         /// <summary>
@@ -84,7 +82,6 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _squad, value);
-
                 Type type = null;
                 switch (_squad) {
                     case SQUAD.spiders: {
@@ -100,31 +97,38 @@ namespace DataBinding.ViewModel
                         break;
                     }
                 }
-                _cachedInsect.ID = Animal.ID;
+                _dbAnimals.Dettach(Animal);
                 TryChangeTypeOfAnimal(type);
+                _dbAnimals.Attach(Animal);
+                Animal.Squad = SelectedSquad;                                               
             }
+        }
+        private Animal Serialize(Type type, Animal source)
+        {
+            var _cachedAnimalProperties = source.GetType().GetProperties();
+            var animal = (Animal) Activator.CreateInstance(type);
+            var properties = type.GetProperties();
+            foreach (var propertyInfo in properties) {
+                var prop = _cachedAnimalProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
+                if (prop != null) {
+                    var value = prop.GetValue(source);
+                    prop.SetValue(animal, value);
+                }
+            }
+            return animal;
         }
         private bool TryChangeTypeOfAnimal(Type type)
         {
-            if (_squad == _cachedInsect.Squad) {
-                Animal = _cachedInsect;
+            if (SelectedSquad == _cachedAnimal.Squad) {
+                var temp = Animal;
+                Animal = _cachedAnimal;
+                _cachedAnimal = temp;
                 return false;
             }
-            var _cachedInsectProperties = _cachedInsect.GetType().GetProperties();
-            var insect = (Animal) Activator.CreateInstance(type);
-            var properties = type.GetProperties();
-            foreach (var propertyInfo in properties) {
-                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
-                if (prop != null) {
-                    var value = prop.GetValue(_cachedInsect);
-                    prop.SetValue(insect, value);
-                }
-            }
-            insect.Squad = SelectedSquad;
-            Animal = insect;
+            var animal = Serialize(type, Animal);            
+            Animal = animal;
             return true;
         }
-
         private RelayCommand _saveToDb;
         public RelayCommand Save
         {
@@ -133,12 +137,12 @@ namespace DataBinding.ViewModel
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
                     (obj) => {
-                        _dbAnimals.Save(Animal, Animal.ID);
-                        _cachedInsect = Animal;
+                        _dbAnimals.Save(Animal);
+                        _cachedAnimal = Serialize(Animal.GetType(), Animal);
                     },
                     (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
             }
-        }
+        }        
         private RelayCommand _cancel;
         public RelayCommand Cancel
         {
@@ -147,8 +151,11 @@ namespace DataBinding.ViewModel
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
                     (obj) => {
-                        Animal = _dbAnimals.Reload(_cachedInsect);
-                        //Animal.Name = "TRAR";
+                        _dbAnimals.Dettach(Animal);
+                        Name = _cachedAnimal.Name;
+                        SelectedSquad = _cachedAnimal.Squad;
+                        Animal = Serialize(_cachedAnimal.GetType(), _cachedAnimal);
+                        _dbAnimals.Attach(Animal);                        
                         DetailView.Close();
                     },
                     (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
@@ -199,5 +206,5 @@ namespace DataBinding.ViewModel
                 SetProperty(ref _hideSpider, value);
             }
         }
-    }
+    }       
 }
