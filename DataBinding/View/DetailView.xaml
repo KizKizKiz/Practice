@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DataBinding.View"
+      xmlns:viewModel="clr-namespace:DataBinding.ViewModel"  
       mc:Ignorable="d"       
       Title="Детальная информация"     
       WindowStartupLocation="CenterScreen" 
@@ -23,6 +24,7 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5,0"/>
         </Style>
+        <viewModel:BoolToStringConverter x:Key="boolConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -85,15 +87,18 @@
                  Text="{Binding Path=Animal.Feet}"/>
         <TextBox Grid.Row="4" Grid.Column="1" 
                  Style="{StaticResource DefaultTxtBox}"
-                 Text="{Binding Animal.IsDangerous}"/>
+                 Text="{Binding Animal.IsDangerous, 
+            Converter={StaticResource boolConverter}}"/>
         <TextBox Grid.Row="5" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Visibility="{Binding HideSpider}"
-                 Text="{Binding Animal.IsRare}"/>
+                 Text="{Binding Animal.IsRare,
+            Converter={StaticResource boolConverter}}"/>
         <TextBox Grid.Row="6" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Visibility="{Binding HideSpider}"
-                 Text="{Binding Animal.HasPoison}"/>
+                 Text="{Binding Animal.HasPoison,
+            Converter={StaticResource boolConverter}}"/>
         <TextBox Grid.Row="7" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Visibility="{Binding HideButterfly}"

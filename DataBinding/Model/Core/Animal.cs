@@ -16,8 +16,7 @@ namespace DataBinding.Core
         /// <summary>
         /// Отряд животного
         /// </summary>        
-        public virtual SQUAD Squad { get; set; }
-
+        public virtual SQUAD Squad { get; set; }        
         private int _age;
         /// <summary>
         /// Получает/задает имя животного

@@ -67,7 +67,7 @@ namespace DataBinding.Model
         /// </summary>        
         public void Attach(T item)
         {
-            Context.Entry(item).State = EntityState.Unchanged;
+            Context.Entry(item).State = EntityState.Modified;
         }
         /// <summary>
         /// Удаляет элемент из отслеживания контекстом данных.

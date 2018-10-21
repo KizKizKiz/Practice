@@ -9,6 +9,7 @@ using DataBinding.Model;
 using DataBinding.Core;
 using DataBinding.Model.DAL;
 using System.Diagnostics;
+using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
@@ -97,10 +98,13 @@ namespace DataBinding.ViewModel
                         break;
                     }
                 }
-                _dbAnimals.Dettach(Animal);
-                TryChangeTypeOfAnimal(type);
-                _dbAnimals.Attach(Animal);
-                Animal.Squad = SelectedSquad;                                               
+
+                if (SelectedSquad != Animal.Squad) {
+                    _dbAnimals.Dettach(Animal);
+                    Animal = Serialize(type, Animal);
+                    _dbAnimals.Attach(Animal);
+                    Animal.Squad = SelectedSquad;
+                }                
             }
         }
         private Animal Serialize(Type type, Animal source)
@@ -116,19 +120,7 @@ namespace DataBinding.ViewModel
                 }
             }
             return animal;
-        }
-        private bool TryChangeTypeOfAnimal(Type type)
-        {
-            if (SelectedSquad == _cachedAnimal.Squad) {
-                var temp = Animal;
-                Animal = _cachedAnimal;
-                _cachedAnimal = temp;
-                return false;
-            }
-            var animal = Serialize(type, Animal);            
-            Animal = animal;
-            return true;
-        }
+        }        
         private RelayCommand _saveToDb;
         public RelayCommand Save
         {
@@ -137,7 +129,7 @@ namespace DataBinding.ViewModel
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
                     (obj) => {
-                        _dbAnimals.Save(Animal);
+                        _dbAnimals.Save(Animal);                        
                         _cachedAnimal = Serialize(Animal.GetType(), Animal);
                     },
                     (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
@@ -152,10 +144,11 @@ namespace DataBinding.ViewModel
                     (_cancel = new RelayCommand("Отмена",
                     (obj) => {
                         _dbAnimals.Dettach(Animal);
-                        Name = _cachedAnimal.Name;
-                        SelectedSquad = _cachedAnimal.Squad;
-                        Animal = Serialize(_cachedAnimal.GetType(), _cachedAnimal);
-                        _dbAnimals.Attach(Animal);                        
+                        
+                        _dbAnimals.Attach(_cachedAnimal);
+                        Animal = _dbAnimals.Reload(_cachedAnimal);
+                        Name = Animal.Name;
+                        SelectedSquad = Animal.Squad;                        
                         DetailView.Close();
                     },
                     (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
