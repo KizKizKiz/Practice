@@ -129,10 +129,11 @@ namespace DataBinding.ViewModel
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
                     (obj) => {
+                        _dbAnimals.DiscriminatorUpdate(Animal);
                         _dbAnimals.Save(Animal);                        
                         _cachedAnimal = Serialize(Animal.GetType(), Animal);
                     },
-                    (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
+                    (obj) => _dbAnimals.IsModified(Animal)));
             }
         }        
         private RelayCommand _cancel;
@@ -144,14 +145,13 @@ namespace DataBinding.ViewModel
                     (_cancel = new RelayCommand("Отмена",
                     (obj) => {
                         _dbAnimals.Dettach(Animal);
-                        
                         _dbAnimals.Attach(_cachedAnimal);
+                        Name = _cachedAnimal.Name;
                         Animal = _dbAnimals.Reload(_cachedAnimal);
-                        Name = Animal.Name;
-                        SelectedSquad = Animal.Squad;                        
+                        SelectedSquad = Animal.Squad;                                                
                         DetailView.Close();
                     },
-                    (obj) => _dbAnimals.HasModifiedOrDetached(Animal)));
+                    (obj) => _dbAnimals.IsModified(Animal)));
             }
         }
         private List<SQUAD> _squads;

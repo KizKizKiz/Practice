@@ -45,8 +45,7 @@ namespace DataBinding.Model
         /// <param name="item">Сохраняемый объект</param>        
         /// <returns>Сохраненный объект</returns>
         public T Save(T item)
-        {
-            Context.Entry(item).State = EntityState.Modified;
+        {            
             Context.SaveChanges();                            
             return item;
         }
@@ -56,9 +55,8 @@ namespace DataBinding.Model
         /// иначе <see langword="false"/>
         /// </summary>
         /// <param name="item">Проверяемый объект</param>        
-        public bool HasModifiedOrDetached(T item)
+        public bool IsModified(T item)
         {
-            Debug.WriteLine(Context.Entry(item).State);
             return Context.Entry(item).State == EntityState.Modified;
         }
         /// <summary>
