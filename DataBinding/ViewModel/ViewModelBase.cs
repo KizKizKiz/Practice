@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DataBinding.ViewModel
 {
@@ -19,6 +21,7 @@ namespace DataBinding.ViewModel
         /// <returns></returns>
         protected virtual bool SetProperty<T>(ref T field, T value, [CallerMemberName]string prop = "")
         {
+            VerifyPropertyName(prop);
             if (EqualityComparer<T>.Default.Equals(value, field)) {
                 return false;
             }
@@ -30,6 +33,15 @@ namespace DataBinding.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName]string prop=null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName)
+        {            
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
+                string msg = "Invalid property name: " + propertyName;                
+                throw new Exception(msg);                
+            }
         }
     }
 }

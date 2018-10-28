@@ -1,6 +1,7 @@
-﻿using System;
+﻿using DataBinding.Model;
+using System;
 
-namespace Task_1.Core
+namespace DataBinding.Core
 {
     /// <summary>
     /// Отряды животных
@@ -10,13 +11,12 @@ namespace Task_1.Core
         spiders = 1,
         lepidoptera = 2
     }
-    public class Animal:IKey
-    {        
+    abstract public class Animal: IKey
+    {
         /// <summary>
         /// Отряд животного
-        /// </summary>
-        public SQUAD Squad { get; set; }
-
+        /// </summary>        
+        public virtual SQUAD Squad { get; set; }        
         private int _age;
         /// <summary>
         /// Получает/задает имя животного
@@ -73,7 +73,8 @@ namespace Task_1.Core
         /// </summary> 
         public override string ToString()
         {
-            return $"Name:{Name}" +
+            return $"ID:{ID}" +
+                   $"\n\tName:{Name}" +
                    $"\n\tAge:{Age}"+
                    $"\n\tSquad:{Squad}";
         }

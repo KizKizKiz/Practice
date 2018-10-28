@@ -4,9 +4,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DataBinding.View"
+      xmlns:viewModel="clr-namespace:DataBinding.ViewModel"  
       mc:Ignorable="d"       
       Title="Детальная информация"     
-      WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+      WindowStartupLocation="CenterScreen" 
+      SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <Style x:Key="DefaultTxtBlock" TargetType="{x:Type TextBlock}">
@@ -20,10 +22,14 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="90"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5,0"/>
         </Style>
+        <viewModel:BoolToStringConverter x:Key="boolConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -70,9 +76,9 @@
                    Style="{StaticResource DefaultTxtBlock}"
                    Visibility="{Binding HideButterfly}"/>
 
-        <TextBox Grid.Row="1" Grid.Column="1"
+        <TextBox Grid.Row="1" Grid.Column="1"                 
                  Style="{StaticResource DefaultTxtBox}"
-                 Text="{Binding Path=Animal.Name}"/>
+                 Text="{Binding Name}"/>
         <TextBox Grid.Row="2" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Text="{Binding Path=Animal.Age}"/>
@@ -81,15 +87,18 @@
                  Text="{Binding Path=Animal.Feet}"/>
         <TextBox Grid.Row="4" Grid.Column="1" 
                  Style="{StaticResource DefaultTxtBox}"
-                 Text="{Binding Animal.IsDangerous}"/>
+                 Text="{Binding Animal.IsDangerous, 
+            Converter={StaticResource boolConverter}}"/>
         <TextBox Grid.Row="5" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Visibility="{Binding HideSpider}"
-                 Text="{Binding Animal.IsRare}"/>
+                 Text="{Binding Animal.IsRare,
+            Converter={StaticResource boolConverter}}"/>
         <TextBox Grid.Row="6" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Visibility="{Binding HideSpider}"
-                 Text="{Binding Animal.HasPoison}"/>
+                 Text="{Binding Animal.HasPoison,
+            Converter={StaticResource boolConverter}}"/>
         <TextBox Grid.Row="7" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Visibility="{Binding HideButterfly}"
@@ -98,5 +107,17 @@
                  Style="{StaticResource DefaultTxtBox}" 
                  Visibility="{Binding HideButterfly}"
                  Text="{Binding Animal.WingsArea}"/>
+        <Button Grid.Column="0" Grid.Row="9" 
+                Margin="5,5,10,5" 
+                Padding="5,5"                        
+                Command="{Binding Save}"
+                Content="{Binding Save}">        
+        </Button>
+        <Button Grid.Column="1" Grid.Row="9" 
+                Margin="5,5,10,5" 
+                Padding="5,5"                        
+                Command="{Binding Cancel}"
+                Content="{Binding Cancel}">
+        </Button>
     </Grid>
 </Window>

@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Data.SqlClient;
 using System.Linq;
-using Task_1.Core;
+using DataBinding.Core;
+using System.Data.Entity;
 
-namespace Task_1
+namespace DataBinding.Model
 {
-    abstract class CachedData<T> : DataAccess<T> where T : IKey
+    abstract class CachedData<T> : DataAccessLayer<T> where T : class, IKey
     {
-        /// <summary>
-        /// Имя таблицы, из которой происходит выборка данных
-        /// </summary>
-        public abstract string Table { get; }
+        public CachedData(DbContext context)
+            :base(context)
+        {
+        }
         /// <summary>
         /// Кэшированные данные
         /// </summary>
@@ -27,8 +28,8 @@ namespace Task_1
         {
             if (!_cachedData.TryGetValue(id, out T element)) {
                 if (element == null) {
-                    element = Load($"SELECT * FROM {Table} WHERE ID={id}").
-                              FirstOrDefault();
+                    element = LazyLoadTable().
+                              FirstOrDefault(elem => elem.ID == id);
                     _cachedData.Add(id, element);
                 }
             }

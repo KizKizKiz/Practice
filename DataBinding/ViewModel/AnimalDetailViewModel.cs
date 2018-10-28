@@ -3,16 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Task_1.Core;
-using Task_1;
 using DataBinding.View;
 using System.Windows;
+using DataBinding.Model;
+using DataBinding.Core;
+using DataBinding.Model.DAL;
+using System.Diagnostics;
+using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
     class AnimalDetailViewModel : ViewModelBase
     {
-        private Essential _essential;
+        private Window _detailView;
+        public Window DetailView
+        {
+            get { return _detailView; }
+            set
+            {
+                _detailView = value;
+                _detailView.DataContext = this;
+            }
+        }
+        private DBSquad _dbSquads;
+        private DBAnimal _dbAnimals;
+        public string Name
+        {
+            get
+            {
+                return Animal.Name;
+            }
+            set
+            {
+                var name = Animal.Name;
+                Animal.Name = value;
+                SetProperty(ref name, value);
+            }
+        }
         private Animal _animal;
         public Animal Animal
         {
@@ -22,28 +49,26 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty(ref _animal, value);
+                SetProperty(ref _animal, value);                
             }
         }
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
-        private DetailView _detailView;
-        public AnimalDetailViewModel(Animal animal, Essential essential)
+        public AnimalDetailViewModel(Animal animal, DBAnimal context)
         {
-            _detailView = new DetailView()
-            {
-                DataContext = this
-            };
-            _animal = animal;
-            _cachedInsect = (Insect) _animal;
-            _essential = essential;
-            Squads = _essential.Load("SELECT Squad FROM CSquad").
-                      Select((an) => an.Squad).ToList();
+            _dbSquads = new DBSquad(context.Context);
+            _dbAnimals = context;
+
+            Squads = _dbSquads.
+                LazyLoadTable().
+                Select(c => c.Type).
+                ToList();
+            Animal = animal;
+            _cachedAnimal = Serialize(animal.GetType(), Animal);
             SelectedSquad = Animal.Squad;
-            _detailView.ShowDialog();
         }
-        private Insect _cachedInsect;
+        private Animal _cachedAnimal;
 
         private SQUAD _squad;
         /// <summary>
@@ -58,44 +83,77 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _squad, value);
-
+                Type type = null;
                 switch (_squad) {
                     case SQUAD.spiders: {
                         HideButterfly = Visibility.Collapsed;
                         HideSpider = Visibility.Visible;
-                        TryChangeTypeOfAnimal(typeof(Spider));
+                        type = typeof(Spider);
                         break;
                     }
                     case SQUAD.lepidoptera: {
                         HideButterfly = Visibility.Visible;
                         HideSpider = Visibility.Collapsed;
-                        TryChangeTypeOfAnimal(typeof(Butterfly));
+                        type = typeof(Butterfly);
                         break;
                     }
                 }
+
+                if (SelectedSquad != Animal.Squad) {
+                    _dbAnimals.Dettach(Animal);
+                    Animal = Serialize(type, Animal);
+                    _dbAnimals.Attach(Animal);
+                    Animal.Squad = SelectedSquad;
+                }                
             }
         }
-        private bool TryChangeTypeOfAnimal(Type type)
+        private Animal Serialize(Type type, Animal source)
         {
-            if (_squad == _cachedInsect.Squad) {
-                Animal = _cachedInsect;
-                return false;
-            }
-            var _cachedInsectProperties = _cachedInsect.GetType().GetProperties();
-            var insect = Activator.CreateInstance(type);            
+            var _cachedAnimalProperties = source.GetType().GetProperties();
+            var animal = (Animal) Activator.CreateInstance(type);
             var properties = type.GetProperties();
             foreach (var propertyInfo in properties) {
-                var prop = _cachedInsectProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
-                if (prop!=null) {
-                    var value = prop.GetValue(_cachedInsect);
-                    prop.SetValue(insect, value);
+                var prop = _cachedAnimalProperties.FirstOrDefault((property) => property.Name == propertyInfo.Name);
+                if (prop != null) {
+                    var value = prop.GetValue(source);
+                    prop.SetValue(animal, value);
                 }
             }
-
-            Animal = (Insect)insect;
-            return true;
+            return animal;
+        }        
+        private RelayCommand _saveToDb;
+        public RelayCommand Save
+        {
+            get
+            {
+                return _saveToDb ??
+                    (_saveToDb = new RelayCommand("Сохранить",
+                    (obj) => {
+                        _dbAnimals.DiscriminatorUpdate(Animal);
+                        _dbAnimals.Save(Animal);                        
+                        _cachedAnimal = Serialize(Animal.GetType(), Animal);
+                    },
+                    (obj) => _dbAnimals.IsModified(Animal)));
+            }
+        }        
+        private RelayCommand _cancel;
+        public RelayCommand Cancel
+        {
+            get
+            {
+                return _cancel ??
+                    (_cancel = new RelayCommand("Отмена",
+                    (obj) => {
+                        _dbAnimals.Dettach(Animal);
+                        _dbAnimals.Attach(_cachedAnimal);
+                        Name = _cachedAnimal.Name;
+                        Animal = _dbAnimals.Reload(_cachedAnimal);
+                        SelectedSquad = Animal.Squad;                                                
+                        DetailView.Close();
+                    },
+                    (obj) => _dbAnimals.IsModified(Animal)));
+            }
         }
-
         private List<SQUAD> _squads;
         /// <summary>
         /// Получает/задает типы животных
@@ -141,5 +199,5 @@ namespace DataBinding.ViewModel
                 SetProperty(ref _hideSpider, value);
             }
         }
-    }
+    }       
 }

@@ -4,19 +4,24 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Configuration;
-using Task_1.Core;
-using Task_1;
 using DataBinding.View;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Reflection;
+using DataBinding.Core;
+using DataBinding.Model;
+using DataBinding.Model.DAL;
+using System.Diagnostics;
+using System.ComponentModel;
+using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
     class ZooViewModel : ViewModelBase
     {
-        private Essential _essential;
+        private AnimalContext _context;
+        private DBAnimal _essential;
         private PropertyInfo[] _propertiesOfColors;
         private List<string> _colors;
         /// <summary>
@@ -33,7 +38,9 @@ namespace DataBinding.ViewModel
                 SetProperty(ref _colors, value);
             }
         }
-
+        /// <summary>
+        /// Получает/задает выбранный цвет
+        /// </summary>
         private string _selectedColor;
         public string SelectedColor
         {
@@ -60,15 +67,18 @@ namespace DataBinding.ViewModel
             {
                 return _detail ??
                     (_detail = new RelayCommand("Детально",
-                    (obj) => new AnimalDetailViewModel(SelectedAnimal, _essential),
+                    (obj) => {
+                        SelectedAnimal.DetailView = new DetailView();
+                        SelectedAnimal.DetailView.ShowDialog();
+                        },
                     (obj) => SelectedAnimal != null));
             }
         }
-        private Animal _selectedAnimal;
+        private AnimalDetailViewModel _selectedAnimal;
         /// <summary>
         /// Получает/задает выбранное животное
         /// </summary>
-        public Animal SelectedAnimal
+        public AnimalDetailViewModel SelectedAnimal
         {
             get
             {
@@ -76,15 +86,15 @@ namespace DataBinding.ViewModel
             }
             set
             {
-                SetProperty<Animal>(ref _selectedAnimal, value);
+                SetProperty(ref _selectedAnimal, value);
+                Debug.WriteLine(_selectedAnimal.Animal);
             }
-        }
-
-        private List<Animal> _animals;
+        }   
+        private List<ViewModelBase> _animals;
         /// <summary>
         /// Получает/задает коллекцию животных 
         /// </summary>
-        public List<Animal> Animals
+        public List<ViewModelBase> Animals
         {
             get
             {
@@ -97,30 +107,13 @@ namespace DataBinding.ViewModel
         }
         public ZooViewModel()
         {
+            _context = new AnimalContext();
             _propertiesOfColors = typeof(Colors).GetProperties();
-            var colorsName = _propertiesOfColors.Select((color) => color.Name);
-            Colors = new List<string>(colorsName);
-            _essential = new Essential();
-            _essential.ConnectionString = ConfigurationSettings.AppSettings["AnimalSqlProvider"];
-            Animals = _essential.Load("SELECT * FROM ANIMALS");
+            Colors = _propertiesOfColors.Select((color) => color.Name).ToList();            
+            _essential = new DBAnimal(_context);
 
-            SomeActions = new List<ICommand>()
-            {
-                new RelayCommand("Show 1", (obj)=>MessageBox.Show("Hello 1"),(obj)=>true),
-                new RelayCommand("Show 2", (obj)=>MessageBox.Show("Hello 2"),(obj)=>true)
-            };        
-        }
-        private List<ICommand> _actions;
-        public List<ICommand> SomeActions
-        {
-            get
-            {
-                return _actions;
-            }
-            set
-            {
-                SetProperty(ref _actions, value);
-            }
+            Animals = _essential.LazyLoadTable().ToList().
+                Select(s => new AnimalDetailViewModel(s, _essential)).ToList<ViewModelBase>();
         }
     }
 }

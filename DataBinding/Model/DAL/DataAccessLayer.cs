@@ -4,103 +4,76 @@ using System.Data.Common;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Data.Entity;
+using System.Linq.Expressions;
+using System.Diagnostics;
+using System.Data.Entity.Infrastructure;
 
-namespace Task_1
+namespace DataBinding.Model
 {
-    abstract class DataAccess<T>
-    {                
-        private string _connectionString;
-        /// <summary>
-        /// Строка подключения к БД
-        /// </summary>
-        public string ConnectionString
+    abstract class DataAccessLayer<T> where T : class
+    {
+        public DbContext Context { get; }
+
+        private DbSet<T> Entity { get; set; }
+        public DataAccessLayer(DbContext context)
         {
-            get
-            {
-                return _connectionString;
-            }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value)) {
-                    throw new ArgumentException("Connection string cannot be null or empty");
-                }
-                _connectionString = value;
-            }
+            Context = context;
+            Entity = Context.Set<T>();
         }
         /// <summary>
-        /// Открывает соединение с БД
-        /// </summary>
-        private SqlConnection OpenConnection()
-        {
-            SqlConnection connection = new SqlConnection(ConnectionString);
-            if (connection.State != ConnectionState.Open) {
-                connection.Open();
-            }
-            return connection;
-        }
-        /// <summary>
-        /// Закрывает соединение с БД
-        /// </summary>
-        private void CloseConnection(SqlConnection connection)
-        {
-            if (connection.State != ConnectionState.Closed) {
-                connection.Close();
-            }
-        }
-        /// <summary>
-        /// Возвращает коллекцию типа <see cref="T"/>, наполненную объектами из БД
+        /// Возвращает коллекцию всех сущностей типа <see cref="T"/>, которые
+        /// запрашиваются из таблицы базы данных. 
+        /// При первом вызове сущности загружает всю таблицу в контекст данных.
         /// </summary>        
-        /// <param name="sql"></param>        
-        public List<T> Load(string sql)
+        public IEnumerable<T> LazyLoadTable()
         {
-            var connection = OpenConnection();
-            var data = new List<T>();
-            try {
-                SqlCommand command = new SqlCommand(sql, connection);
-                using (var reader = command.ExecuteReader()) {
-                    while (reader.Read()) {
-                        var element = Serialize(reader, typeof(T));
-                        data.Add(element);
-                    }
-                }
-            }
-            catch (SqlException) {
-                throw;
-            }
-            catch (Exception) {
-                throw;
-            }
-            finally {
-                CloseConnection(connection);
-            }            
-            return data;
-        }
-        protected virtual T Serialize(SqlDataReader reader, Type type)
+            return Entity;            
+        }      
+        /// <summary>
+        /// Возвращает объект типа <see cref="T"/> из базы данных в неизменном состоянии
+        /// </summary>
+        /// <param name="item">Требуемый аргумент</param>        
+        public T Reload(T item)
         {
-            var element = InitFromRecordByType(type, reader);
-            return element;
+            Context.Entry(item).Reload();            
+            return item;
         }
         /// <summary>
-        /// Создает объект динамически и инициализирует свойства объекта из записи
+        /// Сохраняет объект в таблице базы данных.                
         /// </summary>
-        /// <param name="type">Тип объекта</param>
-        /// <param name="reader">Объект, представляющий запись</param>
-        /// <returns></returns>
-        private T InitFromRecordByType(Type type, SqlDataReader reader)
+        /// <param name="item">Сохраняемый объект</param>        
+        /// <returns>Сохраненный объект</returns>
+        public T Save(T item)
+        {            
+            Context.SaveChanges();                            
+            return item;
+        }
+        
+        /// <summary>
+        /// Возвращает <see langword="true"/> если объект изменен или не отслеживается контекстом,
+        /// иначе <see langword="false"/>
+        /// </summary>
+        /// <param name="item">Проверяемый объект</param>        
+        public bool IsModified(T item)
         {
-            var element = Activator.CreateInstance(type);
-
-            var properties = type.GetProperties();
-            var propertiesName = properties.Select((prop) => prop.Name).ToList();
-
-            for (int i = 0; i < reader.FieldCount; i++) {
-                var column = reader.GetName(i);
-                var property = properties.FirstOrDefault((prop) => prop.Name == column);
-                if (property != null) {
-                    property.SetValue(element, reader[i]);
-                }
-            }
-            return (T) element;
+            return Context.Entry(item).State == EntityState.Modified;
+        }
+        /// <summary>
+        /// Добавляет элемент для отслеживания контекстом данных и устанавливает состояние в неизменное.
+        /// При изменении объекта метод SaveChanges() сгенерирует SQL запрос c изменениями объекта в базе данных
+        /// </summary>        
+        public void Attach(T item)
+        {
+            Context.Entry(item).State = EntityState.Modified;
+        }
+        /// <summary>
+        /// Удаляет элемент из отслеживания контекстом данных.
+        /// При изменении неотслеживаемого объекта метод SaveChanges() НЕ будет генерировать SQL запрос с изменениями к базе данных
+        /// </summary>        
+        public void Dettach(T item)
+        {
+            Context.Entry(item).State = EntityState.Detached;
         }
     }
 }

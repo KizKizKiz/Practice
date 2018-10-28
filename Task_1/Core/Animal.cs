@@ -1,11 +1,13 @@
-﻿using System;
+﻿using ConsoleApp.Model;
+using System;
+using Task_1.DAL.Context;
 
 namespace Task_1.Core
 {
     /// <summary>
     /// Отряды животных
     /// </summary>
-    public enum SQUAD
+    public enum SQUAD:int
     {
         spiders = 1,
         lepidoptera = 2
@@ -15,8 +17,8 @@ namespace Task_1.Core
         /// <summary>
         /// Отряд животного
         /// </summary>
-        public SQUAD Squad { get; set; }
-
+        public virtual AnimalType Squad { get; set; }
+        public SQUAD SquadId { get; set; }
         private int _age;
         /// <summary>
         /// Получает/задает имя животного
@@ -75,7 +77,7 @@ namespace Task_1.Core
         {
             return $"Name:{Name}" +
                    $"\n\tAge:{Age}"+
-                   $"\n\tSquad:{Squad}";
+                   $"\n\tSquad:{Squad.Type}";
         }
        
     }
