@@ -23,6 +23,9 @@ namespace Service.DAL
         /// Возвращает имя столбца дискриминатора в таблице <see cref="Table"/>
         /// </summary>
         protected abstract string Discriminator { get; }
+        /// <summary>
+        /// Возвращает имя таблицы привязки
+        /// </summary>
         protected abstract string Table { get; }
         /// <summary>
         /// Возвращает коллекцию всех сущностей типа <see cref="T"/>, которые
@@ -49,18 +52,23 @@ namespace Service.DAL
         /// <param name="item">Сохраняемый объект</param>        
         /// <param name="id">Уникальный идентификатор</param>
         public T Save(T item, int id)
-        {            
-            var elementByKey = Entity.Find(id);            
-            if (elementByKey != null) {
-                Dettach(elementByKey);
-                Attach(item);
-                if (elementByKey.GetType() != item.GetType()) {
-                    if (!string.IsNullOrWhiteSpace(Discriminator)) {                        
-                        UpdateDiscriminator(item, id);
+        {
+            try {
+                var elementByKey = Entity.Find(id);
+                if (elementByKey != null) {
+                    Dettach(elementByKey);
+                    Attach(item);
+                    if (elementByKey.GetType() != item.GetType()) {
+                        if (!string.IsNullOrWhiteSpace(Discriminator)) {
+                            UpdateDiscriminator(item, id);
+                        }
                     }
                 }
-            }                    
-            Context.SaveChanges();
+                Context.SaveChanges();
+            }
+            catch (Exception exc) {
+                Console.WriteLine(exc.FullMessage());                          
+            }                                   
             return item;
         }
         private void UpdateDiscriminator(T item, int id)
@@ -79,7 +87,7 @@ namespace Service.DAL
         /// Добавляет элемент для отслеживания контекстом данных и устанавливает состояние в неизменное.
         /// При изменении объекта метод SaveChanges() сгенерирует SQL запрос c изменениями объекта в базе данных
         /// </summary>        
-        public void Attach(T item)
+        private void Attach(T item)
         {
             Context.Entry(item).State = EntityState.Modified;
         }
@@ -87,7 +95,7 @@ namespace Service.DAL
         /// Удаляет элемент из отслеживания контекстом данных.
         /// При изменении неотслеживаемого объекта метод SaveChanges() НЕ будет генерировать SQL запрос с изменениями к базе данных
         /// </summary>        
-        public void Dettach(T item)
+        private void Dettach(T item)
         {
             Context.Entry(item).State = EntityState.Detached;
         }

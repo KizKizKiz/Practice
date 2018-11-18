@@ -12,6 +12,6 @@ namespace Service.DAL
         {
         }
         protected override string Discriminator => "Discriminator";
-        protected override string Table => "Cars";
+        protected override string Table => "Animals";
     }
 }

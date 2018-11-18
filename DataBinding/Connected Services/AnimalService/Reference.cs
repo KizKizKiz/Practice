@@ -260,6 +260,12 @@ namespace DataBinding.AnimalService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Animals", ReplyAction="http://tempuri.org/AnimalService/AnimalsResponse")]
         System.Threading.Tasks.Task<System.Collections.Generic.List<DataBinding.AnimalService.Animal>> AnimalsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Squads", ReplyAction="http://tempuri.org/AnimalService/SquadsResponse")]
+        System.Collections.Generic.List<DataBinding.AnimalService.SQUAD> Squads();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Squads", ReplyAction="http://tempuri.org/AnimalService/SquadsResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DataBinding.AnimalService.SQUAD>> SquadsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -311,6 +317,14 @@ namespace DataBinding.AnimalService {
         
         public System.Threading.Tasks.Task<System.Collections.Generic.List<DataBinding.AnimalService.Animal>> AnimalsAsync() {
             return base.Channel.AnimalsAsync();
+        }
+        
+        public System.Collections.Generic.List<DataBinding.AnimalService.SQUAD> Squads() {
+            return base.Channel.Squads();
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<DataBinding.AnimalService.SQUAD>> SquadsAsync() {
+            return base.Channel.SquadsAsync();
         }
     }
 }

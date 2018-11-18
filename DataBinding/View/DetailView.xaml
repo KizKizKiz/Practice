@@ -77,8 +77,17 @@
                    Visibility="{Binding HideButterfly}"/>
 
         <TextBox Grid.Row="1" Grid.Column="1"                 
-                 Style="{StaticResource DefaultTxtBox}"
-                 Text="{Binding Name}"/>
+                 Style="{StaticResource DefaultTxtBox}"                 
+                 >
+            <TextBox.Text>
+                <Binding Path="Name">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
         <TextBox Grid.Row="2" Grid.Column="1"
                  Style="{StaticResource DefaultTxtBox}"
                  Text="{Binding Path=Animal.Age}"/>

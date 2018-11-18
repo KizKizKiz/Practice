@@ -85,11 +85,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Connected Services\SquadService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ActionList.xaml.cs">
       <DependentUpon>ActionList.xaml</DependentUpon>
     </Compile>
@@ -148,6 +143,9 @@
     <None Include="Connected Services\AnimalService\DataBinding.AnimalService.Animal.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\AnimalService\DataBinding.AnimalService.SQUAD.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\AnimalService\MEX.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -157,22 +155,6 @@
     <None Include="Connected Services\AnimalService\MEX2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\SquadService\DataBinding.SquadService.AnimalType.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\SquadService\MEX.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\SquadService\MEX1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\SquadService\MEX2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\SquadService\MEX3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\SquadService\SquadService.wsdl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -201,12 +183,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Connected Services\SquadService\configuration91.svcinfo" />
-    <None Include="Connected Services\SquadService\configuration.svcinfo" />
-    <None Include="Connected Services\SquadService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="DatabaseAnimal.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -220,7 +196,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AnimalService\" />
-    <WCFMetadataStorage Include="Connected Services\SquadService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

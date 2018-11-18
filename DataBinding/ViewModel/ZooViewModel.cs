@@ -5,12 +5,12 @@ using System.Windows.Media;
 using System.Windows;
 using System.Reflection;
 using System.Diagnostics;
-
+using DataBinding.AnimalService;
 namespace DataBinding.ViewModel
 {
     class ZooViewModel : ViewModelBase
     {
-        private AnimalService.AnimalServiceClient _animalService;        
+        private AnimalServiceClient _animalService;        
         private PropertyInfo[] _propertiesOfColors;
         private List<string> _colors;
         /// <summary>
@@ -76,7 +76,6 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _selectedAnimal, value);
-                Debug.WriteLine(_selectedAnimal.Animal);
             }
         }   
         private List<ViewModelBase> _animals;
@@ -96,12 +95,12 @@ namespace DataBinding.ViewModel
         }
         public ZooViewModel()
         {
-            _animalService = new AnimalService.AnimalServiceClient();
+            _animalService = new AnimalServiceClient();
             _propertiesOfColors = typeof(Colors).GetProperties();
             Colors = _propertiesOfColors.Select((color) => color.Name).ToList();                        
 
             Animals = _animalService.Animals().
-                Select(s => new AnimalDetailViewModel(s)).ToList<ViewModelBase>();
+                Select(s => new AnimalDetailViewModel(s, _animalService)).ToList<ViewModelBase>();
         }
     }
 }

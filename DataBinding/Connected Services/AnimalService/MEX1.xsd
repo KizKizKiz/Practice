@@ -68,4 +68,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfAnimal" nillable="true" type="tns:ArrayOfAnimal" />
+  <xs:complexType name="ArrayOfSQUAD">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SQUAD" type="tns:SQUAD" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSQUAD" nillable="true" type="tns:ArrayOfSQUAD" />
 </xs:schema>

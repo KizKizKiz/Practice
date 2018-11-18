@@ -1,16 +1,19 @@
-﻿using DataBinding.SquadService;
-using DataBinding.AnimalService;
+﻿using DataBinding.AnimalService;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 
 namespace DataBinding.ViewModel
 {
-    class AnimalDetailViewModel : ViewModelBase
+    class AnimalDetailViewModel : ViewModelBase, IDataErrorInfo
     {
         private Window _detailView;
-        private SquadServiceClient _squadService;
+        private AnimalServiceClient _animalService;
+        /// <summary>
+        /// Получает/задает окно детального отображения информации
+        /// </summary
         public Window DetailView
         {
             get { return _detailView; }
@@ -20,11 +23,14 @@ namespace DataBinding.ViewModel
                 _detailView.DataContext = this;
             }
         }        
+        /// <summary>
+        /// Получает/задает имя животного
+        /// </summary>
         public string Name
         {
             get
             {
-                return Animal;
+                return Animal.Name;
             }
             set
             {
@@ -48,13 +54,10 @@ namespace DataBinding.ViewModel
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
-        public AnimalDetailViewModel(Animal animal, AnimalService.AnimalServiceClient)
+        public AnimalDetailViewModel(Animal animal, AnimalServiceClient animalService)
         {
-            _squadService = new SquadService.SquadServiceClient();
-            Squads = _squadService.
-                Squads().
-                Select(c=>c.Type).
-                ToList();
+            _animalService = animalService;
+            Squads = animalService.Squads();
             Animal = animal;
             _cachedAnimal = Serialize(animal.GetType(), Animal);
             SelectedSquad = Animal.Squad;
@@ -111,6 +114,9 @@ namespace DataBinding.ViewModel
             return animal;
         }        
         private RelayCommand _saveToDb;
+        /// <summary>
+        /// Сохраняет изменения и кэширует сохраняемый объект
+        /// </summary>
         public RelayCommand Save
         {
             get
@@ -118,35 +124,37 @@ namespace DataBinding.ViewModel
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
                     (obj) => {                        
-                        _an.Save(Animal);                        
+                        _animalService.Save(Animal, Animal.ID);                        
                         _cachedAnimal = Serialize(Animal.GetType(), Animal);
                     },
                     (obj) => true ));
             }
         }        
         private RelayCommand _cancel;
+        /// <summary>
+        /// Отменяет произведенный действия и приводит объект к изначальному состоянию
+        /// </summary>
         public RelayCommand Cancel
         {
             get
             {
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
-                    (obj) => {
-                        _dbAnimals.Dettach(Animal);
-                        _dbAnimals.Attach(_cachedAnimal);
-                        Name = _cachedAnimal.Name;
-                        Animal = _dbAnimals.Reload(_cachedAnimal);
-                        SelectedSquad = Animal.Squad;                                                
+                    (obj) => {                        
+                        Name = _cachedAnimal.Name;                        
+                        SelectedSquad = _cachedAnimal.Squad;                        
+                        Animal = _cachedAnimal;
+                        _cachedAnimal = Serialize(Animal.GetType(), Animal);
                         DetailView.Close();
                     },
-                    (obj) => _dbAnimals.IsModified(Animal)));
+                    (obj) =>true));
             }
         }
-        private List<SquadService.SQUAD> _squads;
+        private List<SQUAD> _squads;
         /// <summary>
         /// Получает/задает типы животных
         /// </summary>
-        public List<SquadService.SQUAD> Squads
+        public List<SQUAD> Squads
         {
             get
             {
@@ -185,6 +193,25 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _hideSpider, value);
+            }
+        }
+
+        public string Error => throw new NotImplementedException();
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = string.Empty;
+                switch (columnName) {
+                    case "WingsArea": {
+                        if (string.IsNullOrWhiteSpace(Name)) {
+                            error = "Поле не должно быть пустым";
+                        }
+                        break;
+                    }
+                }
+                return error;
             }
         }
     }       

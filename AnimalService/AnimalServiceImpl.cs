@@ -10,13 +10,17 @@ using System.Data.Entity;
 namespace AnimalService
 {
     [ServiceContract]
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults =true)]
     public class AnimalService
     {
         private DBAnimal _dbAnimal;
-        public AnimalService(AnimalContext context)
+        private DBSquad _dbSquad;
+        private AnimalContext _context;
+        public AnimalService()
         {
-            _dbAnimal = new DBAnimal(context);
+            _context = new AnimalContext();
+            _dbAnimal = new DBAnimal(_context);
+            _dbSquad = new DBSquad(_context);
         }
         [OperationContract]
         public Animal GetByIdFromCache(int id)
@@ -28,7 +32,7 @@ namespace AnimalService
             catch (Exception e) {
                 throw new FaultException<ArgumentOutOfRangeException>(
                     new ArgumentOutOfRangeException($"Cannot find record with ID = {id}", e),
-                    (string) null);
+                    "");
             }
             return animal;
         }
@@ -42,5 +46,10 @@ namespace AnimalService
         {
             return _dbAnimal.LazyLoadTable();
         }        
+        [OperationContract]
+        public IEnumerable<SQUAD> Squads()
+        {
+            return _dbSquad.LazyLoadTable().Select(c => c.Type);
+        }
     }
 }

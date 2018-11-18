@@ -42,4 +42,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="Squads">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SquadsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Practice.Core" minOccurs="0" name="SquadsResult" nillable="true" type="q5:ArrayOfSQUAD" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
