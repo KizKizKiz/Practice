@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SquadService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:9876/SquadService/MEX?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:9876/SquadService/MEX?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:9876/SquadService/MEX?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Service.DAL" />
+      <xsd:import schemaLocation="http://localhost:9876/SquadService/MEX?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Practice.Core" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="SquadService_GetByIdFromCache_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetByIdFromCache" />
+  </wsdl:message>
+  <wsdl:message name="SquadService_GetByIdFromCache_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetByIdFromCacheResponse" />
+  </wsdl:message>
+  <wsdl:message name="SquadService_Save_InputMessage">
+    <wsdl:part name="parameters" element="tns:Save" />
+  </wsdl:message>
+  <wsdl:message name="SquadService_Save_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="SquadService_Squads_InputMessage">
+    <wsdl:part name="parameters" element="tns:Squads" />
+  </wsdl:message>
+  <wsdl:message name="SquadService_Squads_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SquadsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="SquadService">
+    <wsdl:operation name="GetByIdFromCache">
+      <wsdl:input wsaw:Action="http://tempuri.org/SquadService/GetByIdFromCache" message="tns:SquadService_GetByIdFromCache_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/SquadService/GetByIdFromCacheResponse" message="tns:SquadService_GetByIdFromCache_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Save">
+      <wsdl:input wsaw:Action="http://tempuri.org/SquadService/Save" message="tns:SquadService_Save_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/SquadService/SaveResponse" message="tns:SquadService_Save_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Squads">
+      <wsdl:input wsaw:Action="http://tempuri.org/SquadService/Squads" message="tns:SquadService_Squads_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/SquadService/SquadsResponse" message="tns:SquadService_Squads_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_SquadService" type="tns:SquadService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetByIdFromCache">
+      <soap:operation soapAction="http://tempuri.org/SquadService/GetByIdFromCache" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Save">
+      <soap:operation soapAction="http://tempuri.org/SquadService/Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Squads">
+      <soap:operation soapAction="http://tempuri.org/SquadService/Squads" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SquadService">
+    <wsdl:port name="BasicHttpBinding_SquadService" binding="tns:BasicHttpBinding_SquadService">
+      <soap:address location="http://localhost:9876/SquadService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

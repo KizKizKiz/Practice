@@ -1,35 +1,46 @@
-﻿using Practice.Core;
+﻿using System;
+using Practice.Core;
 using Service.DAL;
 using Service.DAL.Context;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.Data.Entity;
 
 namespace AnimalService
 {
     [ServiceContract]
-    [ServiceBehavior(IncludeExceptionDetailInFaults =true)]
-    public class AnimalServiceImpl
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    public class AnimalService
     {
         private DBAnimal _dbAnimal;
-        public AnimalServiceImpl()
+        public AnimalService(AnimalContext context)
         {
-            _dbAnimal = new DBAnimal(new AnimalContext());
+            _dbAnimal = new DBAnimal(context);
         }
         [OperationContract]
-        public Animal GetById(int id)
+        public Animal GetByIdFromCache(int id)
         {
-            return _dbAnimal.LoadById(id);
+            Animal animal;
+            try {
+                animal = _dbAnimal.LoadById(id);
+            }
+            catch (Exception e) {
+                throw new FaultException<ArgumentOutOfRangeException>(
+                    new ArgumentOutOfRangeException($"Cannot find record with ID = {id}", e),
+                    (string) null);
+            }
+            return animal;
+        }
+        [OperationContract]                
+        public Animal Save(Animal animal, int id)
+        {
+            return _dbAnimal.Save(animal, id);
         }
         [OperationContract]
-        public Animal Save(Animal obj)
+        public IQueryable<Animal> Animals()
         {
-            return _dbAnimal.Save(obj);
-        }
-        [OperationContract]
-        public IEnumerable<Animal> Animals()
-        {            
             return _dbAnimal.LazyLoadTable();
-        }
+        }        
     }
 }

@@ -52,12 +52,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -77,6 +71,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\SquadService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -84,7 +83,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AnimalService\AnimalServiceImpl.wsdl" />
+    <None Include="Connected Services\AnimalService\AnimalService.wsdl" />
     <None Include="Connected Services\AnimalService\MEX.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -94,10 +93,24 @@
     <None Include="Connected Services\AnimalService\MEX2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AnimalService\Task_1.AnimalService.Animal.datasource">
+    <None Include="Connected Services\SquadService\MEX.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SquadService\MEX1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SquadService\MEX2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SquadService\MEX3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SquadService\SquadService.wsdl" />
+    <None Include="Connected Services\SquadService\Task_1.SquadService.AnimalType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Practice.Core.Animal.datasource" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -119,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\AnimalService\" />
+    <WCFMetadataStorage Include="Connected Services\SquadService\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\AnimalService\configuration91.svcinfo" />
@@ -131,6 +145,24 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SquadService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SquadService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SquadService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{A20316BB-B819-48E6-92AD-7F976A751C84}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

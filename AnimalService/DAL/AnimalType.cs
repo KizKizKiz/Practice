@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
 namespace Service.DAL
 {
-    [DataContract]
+    [DataContract(Name = "SquadServiceContract")]
     public class AnimalType:IKey
     {      
         [DataMember]

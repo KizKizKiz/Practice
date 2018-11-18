@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ExceptionEx.cs" />
     <Compile Include="Model\Core\Animal.cs" />
     <Compile Include="Model\Core\Butterfly.cs" />
     <Compile Include="Model\Core\IKey.cs" />

@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
-using System.Configuration;
 using DataBinding.View;
 using System.Windows.Media;
 using System.Windows;
-using System.Windows.Controls;
 using System.Reflection;
-using DataBinding.Core;
-using DataBinding.Model;
-using DataBinding.Model.DAL;
 using System.Diagnostics;
-using System.ComponentModel;
-using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
     class ZooViewModel : ViewModelBase
     {
-        private AnimalContext _context;
-        private DBAnimal _essential;
+        private AnimalService.AnimalServiceClient _animalService;        
         private PropertyInfo[] _propertiesOfColors;
         private List<string> _colors;
         /// <summary>
@@ -107,13 +96,12 @@ namespace DataBinding.ViewModel
         }
         public ZooViewModel()
         {
-            _context = new AnimalContext();
+            _animalService = new AnimalService.AnimalServiceClient();
             _propertiesOfColors = typeof(Colors).GetProperties();
-            Colors = _propertiesOfColors.Select((color) => color.Name).ToList();            
-            _essential = new DBAnimal(_context);
+            Colors = _propertiesOfColors.Select((color) => color.Name).ToList();                        
 
-            Animals = _essential.LazyLoadTable().ToList().
-                Select(s => new AnimalDetailViewModel(s, _essential)).ToList<ViewModelBase>();
+            Animals = _animalService.Animals().
+                Select(s => new AnimalDetailViewModel(s)).ToList<ViewModelBase>();
         }
     }
 }

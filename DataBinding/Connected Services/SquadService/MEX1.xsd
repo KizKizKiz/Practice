@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Practice.Core" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Practice.Core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:9876/SquadService/MEX?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfAnimal">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Animal" nillable="true" type="tns:Animal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAnimal" nillable="true" type="tns:ArrayOfAnimal" />
+  <xs:complexType name="Animal">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Age" type="xs:int" />
+      <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Squad" type="tns:SQUAD" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Animal" nillable="true" type="tns:Animal" />
+  <xs:simpleType name="SQUAD">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="spiders">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="lepidoptera">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SQUAD" nillable="true" type="tns:SQUAD" />
+  <xs:complexType name="Butterfly">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Insect">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Color" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="WingsArea" type="xs:double" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Butterfly" nillable="true" type="tns:Butterfly" />
+  <xs:complexType name="Insect">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Animal">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Feet" type="xs:int" />
+          <xs:element minOccurs="0" name="IsDangerous" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Insect" nillable="true" type="tns:Insect" />
+  <xs:complexType name="Spider">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Insect">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="HasPoison" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsRare" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Spider" nillable="true" type="tns:Spider" />
+</xs:schema>

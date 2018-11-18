@@ -10,18 +10,8 @@ namespace Service.DAL
         public DBAnimal(AnimalContext context)
             : base(context)
         {
-        }                  
-        public void DiscriminatorUpdate(Animal animal)
-        {
-            var sql = $"update Animals " +
-                      $"set Discriminator=@discr " +
-                      $"where Id=@id";
-            Context.Database.ExecuteSqlCommand(sql,
-                new SqlParameter[]
-                {
-                    new SqlParameter("@discr", animal.GetType().Name),
-                    new SqlParameter("@id", animal.ID)
-                });
         }
+        protected override string Discriminator => "Discriminator";
+        protected override string Table => "Cars";
     }
 }

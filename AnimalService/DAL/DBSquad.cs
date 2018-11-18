@@ -9,5 +9,7 @@ namespace Service.DAL
             :base(context)
         {
         }
+        protected override string Discriminator => null;
+        protected override string Table => "Squads";
     }
 }

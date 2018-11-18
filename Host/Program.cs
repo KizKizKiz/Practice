@@ -3,38 +3,45 @@ using System.Text;
 using System.ServiceModel;
 using Service.DAL;
 using Practice.Core;
+using System.Data.Entity;
+using Service.DAL.Context;
+using System.Collections.Generic;
+using System.ServiceModel.Description;
+using CommonLib.Extensions;
 
 namespace Host
 {
     class Program
     {
-        static ServiceHost _service;
+        static ServiceHost AnimalServiceHost;
+        static ServiceHost SquadServiceHost;
+        static AnimalContext Context;
         static void Main(string[] args)
-        {            
-            Console.WriteLine("Service opened");
+        {
+            Console.WriteLine("Try open services...");
             try {
-                _service = new ServiceHost(typeof(AnimalService.AnimalServiceImpl));
-                _service.Open();
-                Console.WriteLine("Started...");
+                Context = new AnimalContext();                     
+                AnimalServiceHost = new ServiceHost(new AnimalService.AnimalService(Context));
+                SquadServiceHost = new ServiceHost(new AnimalService.SquadService(Context));
+                TryOpenService(AnimalServiceHost, SquadServiceHost);
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("***** EXCEPTION *****");
+                Console.WriteLine(e.FullMessage());
             }                       
             Console.ReadKey();
         }
-    }
-    static class Extension
-    {
-        public static string FullMessage(this Exception exc)
+        /// <summary>
+        /// Переводит массив сервисов в состояние Opened
+        /// </summary>
+        /// <param name="hosts"></param>
+        private static void TryOpenService(params ServiceHost[] hosts)
         {
-            var innerExc = exc.InnerException;
-            StringBuilder stringBuilder = new StringBuilder();
-            while (innerExc!=null) {
-                stringBuilder.Append(innerExc.Message);
-                stringBuilder.AppendLine();
-                innerExc = innerExc.InnerException;
+            foreach (var host in hosts) {
+                host.Open();
+                Console.WriteLine($"{host.Description.Name} has opened");
             }
-            return stringBuilder.ToString();
-        }
+        }        
     }
+   
 }

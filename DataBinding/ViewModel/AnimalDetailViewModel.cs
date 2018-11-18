@@ -1,21 +1,16 @@
-﻿using System;
+﻿using DataBinding.SquadService;
+using DataBinding.AnimalService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataBinding.View;
 using System.Windows;
-using DataBinding.Model;
-using DataBinding.Core;
-using DataBinding.Model.DAL;
-using System.Diagnostics;
-using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
     class AnimalDetailViewModel : ViewModelBase
     {
         private Window _detailView;
+        private SquadServiceClient _squadService;
         public Window DetailView
         {
             get { return _detailView; }
@@ -24,14 +19,12 @@ namespace DataBinding.ViewModel
                 _detailView = value;
                 _detailView.DataContext = this;
             }
-        }
-        private DBSquad _dbSquads;
-        private DBAnimal _dbAnimals;
+        }        
         public string Name
         {
             get
             {
-                return Animal.Name;
+                return Animal;
             }
             set
             {
@@ -55,14 +48,12 @@ namespace DataBinding.ViewModel
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
-        public AnimalDetailViewModel(Animal animal, DBAnimal context)
+        public AnimalDetailViewModel(Animal animal, AnimalService.AnimalServiceClient)
         {
-            _dbSquads = new DBSquad(context.Context);
-            _dbAnimals = context;
-
-            Squads = _dbSquads.
-                LazyLoadTable().
-                Select(c => c.Type).
+            _squadService = new SquadService.SquadServiceClient();
+            Squads = _squadService.
+                Squads().
+                Select(c=>c.Type).
                 ToList();
             Animal = animal;
             _cachedAnimal = Serialize(animal.GetType(), Animal);
@@ -99,12 +90,10 @@ namespace DataBinding.ViewModel
                     }
                 }
 
-                if (SelectedSquad != Animal.Squad) {
-                    _dbAnimals.Dettach(Animal);
-                    Animal = Serialize(type, Animal);
-                    _dbAnimals.Attach(Animal);
+                if (SelectedSquad != Animal.Squad) {                    
+                    Animal = Serialize(type, Animal);                    
                     Animal.Squad = SelectedSquad;
-                }                
+                }
             }
         }
         private Animal Serialize(Type type, Animal source)
@@ -128,12 +117,11 @@ namespace DataBinding.ViewModel
             {
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
-                    (obj) => {
-                        _dbAnimals.DiscriminatorUpdate(Animal);
-                        _dbAnimals.Save(Animal);                        
+                    (obj) => {                        
+                        _an.Save(Animal);                        
                         _cachedAnimal = Serialize(Animal.GetType(), Animal);
                     },
-                    (obj) => _dbAnimals.IsModified(Animal)));
+                    (obj) => true ));
             }
         }        
         private RelayCommand _cancel;
@@ -154,11 +142,11 @@ namespace DataBinding.ViewModel
                     (obj) => _dbAnimals.IsModified(Animal)));
             }
         }
-        private List<SQUAD> _squads;
+        private List<SquadService.SQUAD> _squads;
         /// <summary>
         /// Получает/задает типы животных
         /// </summary>
-        public List<SQUAD> Squads
+        public List<SquadService.SQUAD> Squads
         {
             get
             {

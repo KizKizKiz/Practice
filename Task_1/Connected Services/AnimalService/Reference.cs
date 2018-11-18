@@ -9,307 +9,85 @@
 //------------------------------------------------------------------------------
 
 namespace Task_1.AnimalService {
-    using System.Runtime.Serialization;
-    using System;
     
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Animal", Namespace="http://schemas.datacontract.org/2004/07/Practice.Core")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Task_1.AnimalService.Insect))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Task_1.AnimalService.Butterfly))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Task_1.AnimalService.Spider))]
-    public partial class Animal : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="AnimalService.AnimalService")]
+    public interface AnimalService {
         
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/GetByIdFromCache", ReplyAction="http://tempuri.org/AnimalService/GetByIdFromCacheResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Practice.Core.Insect))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Practice.Core.Butterfly))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Practice.Core.Spider))]
+        Practice.Core.Animal GetByIdFromCache(int id);
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int AgeField;
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/GetByIdFromCache", ReplyAction="http://tempuri.org/AnimalService/GetByIdFromCacheResponse")]
+        System.Threading.Tasks.Task<Practice.Core.Animal> GetByIdFromCacheAsync(int id);
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IDField;
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Save", ReplyAction="http://tempuri.org/AnimalService/SaveResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Practice.Core.Insect))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Practice.Core.Butterfly))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Practice.Core.Spider))]
+        Practice.Core.Animal Save(Practice.Core.Animal animal, int id);
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NameField;
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Save", ReplyAction="http://tempuri.org/AnimalService/SaveResponse")]
+        System.Threading.Tasks.Task<Practice.Core.Animal> SaveAsync(Practice.Core.Animal animal, int id);
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Task_1.AnimalService.SQUAD SquadField;
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Animals", ReplyAction="http://tempuri.org/AnimalService/AnimalsResponse")]
+        System.Collections.Generic.List<Practice.Core.Animal> Animals();
         
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Age {
-            get {
-                return this.AgeField;
-            }
-            set {
-                if ((this.AgeField.Equals(value) != true)) {
-                    this.AgeField = value;
-                    this.RaisePropertyChanged("Age");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ID {
-            get {
-                return this.IDField;
-            }
-            set {
-                if ((this.IDField.Equals(value) != true)) {
-                    this.IDField = value;
-                    this.RaisePropertyChanged("ID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Name {
-            get {
-                return this.NameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NameField, value) != true)) {
-                    this.NameField = value;
-                    this.RaisePropertyChanged("Name");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Task_1.AnimalService.SQUAD Squad {
-            get {
-                return this.SquadField;
-            }
-            set {
-                if ((this.SquadField.Equals(value) != true)) {
-                    this.SquadField = value;
-                    this.RaisePropertyChanged("Squad");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Insect", Namespace="http://schemas.datacontract.org/2004/07/Practice.Core")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Task_1.AnimalService.Butterfly))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Task_1.AnimalService.Spider))]
-    public partial class Insect : Task_1.AnimalService.Animal {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int FeetField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsDangerousField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Feet {
-            get {
-                return this.FeetField;
-            }
-            set {
-                if ((this.FeetField.Equals(value) != true)) {
-                    this.FeetField = value;
-                    this.RaisePropertyChanged("Feet");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsDangerous {
-            get {
-                return this.IsDangerousField;
-            }
-            set {
-                if ((this.IsDangerousField.Equals(value) != true)) {
-                    this.IsDangerousField = value;
-                    this.RaisePropertyChanged("IsDangerous");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Butterfly", Namespace="http://schemas.datacontract.org/2004/07/Practice.Core")]
-    [System.SerializableAttribute()]
-    public partial class Butterfly : Task_1.AnimalService.Insect {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ColorField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double WingsAreaField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Color {
-            get {
-                return this.ColorField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ColorField, value) != true)) {
-                    this.ColorField = value;
-                    this.RaisePropertyChanged("Color");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public double WingsArea {
-            get {
-                return this.WingsAreaField;
-            }
-            set {
-                if ((this.WingsAreaField.Equals(value) != true)) {
-                    this.WingsAreaField = value;
-                    this.RaisePropertyChanged("WingsArea");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Spider", Namespace="http://schemas.datacontract.org/2004/07/Practice.Core")]
-    [System.SerializableAttribute()]
-    public partial class Spider : Task_1.AnimalService.Insect {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool HasPoisonField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsRareField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool HasPoison {
-            get {
-                return this.HasPoisonField;
-            }
-            set {
-                if ((this.HasPoisonField.Equals(value) != true)) {
-                    this.HasPoisonField = value;
-                    this.RaisePropertyChanged("HasPoison");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsRare {
-            get {
-                return this.IsRareField;
-            }
-            set {
-                if ((this.IsRareField.Equals(value) != true)) {
-                    this.IsRareField = value;
-                    this.RaisePropertyChanged("IsRare");
-                }
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SQUAD", Namespace="http://schemas.datacontract.org/2004/07/Practice.Core")]
-    public enum SQUAD : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        spiders = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        lepidoptera = 2,
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalService/Animals", ReplyAction="http://tempuri.org/AnimalService/AnimalsResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<Practice.Core.Animal>> AnimalsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="AnimalService.AnimalServiceImpl")]
-    public interface AnimalServiceImpl {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalServiceImpl/GetById", ReplyAction="http://tempuri.org/AnimalServiceImpl/GetByIdResponse")]
-        Task_1.AnimalService.Animal GetById(int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalServiceImpl/GetById", ReplyAction="http://tempuri.org/AnimalServiceImpl/GetByIdResponse")]
-        System.Threading.Tasks.Task<Task_1.AnimalService.Animal> GetByIdAsync(int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalServiceImpl/Save", ReplyAction="http://tempuri.org/AnimalServiceImpl/SaveResponse")]
-        Task_1.AnimalService.Animal Save(Task_1.AnimalService.Animal obj);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalServiceImpl/Save", ReplyAction="http://tempuri.org/AnimalServiceImpl/SaveResponse")]
-        System.Threading.Tasks.Task<Task_1.AnimalService.Animal> SaveAsync(Task_1.AnimalService.Animal obj);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalServiceImpl/Animals", ReplyAction="http://tempuri.org/AnimalServiceImpl/AnimalsResponse")]
-        System.Collections.Generic.LinkedList<Task_1.AnimalService.Animal> Animals();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AnimalServiceImpl/Animals", ReplyAction="http://tempuri.org/AnimalServiceImpl/AnimalsResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.LinkedList<Task_1.AnimalService.Animal>> AnimalsAsync();
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface AnimalServiceImplChannel : Task_1.AnimalService.AnimalServiceImpl, System.ServiceModel.IClientChannel {
+    public interface AnimalServiceChannel : Task_1.AnimalService.AnimalService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class AnimalServiceImplClient : System.ServiceModel.ClientBase<Task_1.AnimalService.AnimalServiceImpl>, Task_1.AnimalService.AnimalServiceImpl {
+    public partial class AnimalServiceClient : System.ServiceModel.ClientBase<Task_1.AnimalService.AnimalService>, Task_1.AnimalService.AnimalService {
         
-        public AnimalServiceImplClient() {
+        public AnimalServiceClient() {
         }
         
-        public AnimalServiceImplClient(string endpointConfigurationName) : 
+        public AnimalServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public AnimalServiceImplClient(string endpointConfigurationName, string remoteAddress) : 
+        public AnimalServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public AnimalServiceImplClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public AnimalServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public AnimalServiceImplClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public AnimalServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
-        public Task_1.AnimalService.Animal GetById(int id) {
-            return base.Channel.GetById(id);
+        public Practice.Core.Animal GetByIdFromCache(int id) {
+            return base.Channel.GetByIdFromCache(id);
         }
         
-        public System.Threading.Tasks.Task<Task_1.AnimalService.Animal> GetByIdAsync(int id) {
-            return base.Channel.GetByIdAsync(id);
+        public System.Threading.Tasks.Task<Practice.Core.Animal> GetByIdFromCacheAsync(int id) {
+            return base.Channel.GetByIdFromCacheAsync(id);
         }
         
-        public Task_1.AnimalService.Animal Save(Task_1.AnimalService.Animal obj) {
-            return base.Channel.Save(obj);
+        public Practice.Core.Animal Save(Practice.Core.Animal animal, int id) {
+            return base.Channel.Save(animal, id);
         }
         
-        public System.Threading.Tasks.Task<Task_1.AnimalService.Animal> SaveAsync(Task_1.AnimalService.Animal obj) {
-            return base.Channel.SaveAsync(obj);
+        public System.Threading.Tasks.Task<Practice.Core.Animal> SaveAsync(Practice.Core.Animal animal, int id) {
+            return base.Channel.SaveAsync(animal, id);
         }
         
-        public System.Collections.Generic.LinkedList<Task_1.AnimalService.Animal> Animals() {
+        public System.Collections.Generic.List<Practice.Core.Animal> Animals() {
             return base.Channel.Animals();
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.LinkedList<Task_1.AnimalService.Animal>> AnimalsAsync() {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<Practice.Core.Animal>> AnimalsAsync() {
             return base.Channel.AnimalsAsync();
         }
     }

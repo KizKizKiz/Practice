@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6c9ceecd-af51-4e29-b211-5393082345e5" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="96f0894a-3672-4963-9042-863090c960bf" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -10,7 +10,7 @@
     <GenerateMessageContracts>false</GenerateMessageContracts>
     <NamespaceMappings />
     <CollectionMappings>
-      <CollectionMapping TypeName="System.Collections.Generic.LinkedList`1" Category="List" />
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
     </CollectionMappings>
     <GenerateSerializableTypes>true</GenerateSerializableTypes>
     <Serializer>Auto</Serializer>
@@ -24,10 +24,10 @@
     <MetadataSource Address="http://localhost:9876/AnimalService/MEX" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MEX.xsd" MetadataType="Schema" ID="bd349ca7-8526-457d-85b0-d99608a42620" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX?xsd=xsd0" />
-    <MetadataFile FileName="MEX1.xsd" MetadataType="Schema" ID="c9530f45-369a-4f33-a58a-2c877f08d152" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX?xsd=xsd2" />
-    <MetadataFile FileName="MEX2.xsd" MetadataType="Schema" ID="c44a8235-06b5-4ce4-9e99-e18fe7f8931b" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX?xsd=xsd1" />
-    <MetadataFile FileName="AnimalServiceImpl.wsdl" MetadataType="Wsdl" ID="75bfd852-08ab-497e-a9f8-1bb05cbec164" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX" />
+    <MetadataFile FileName="MEX.xsd" MetadataType="Schema" ID="10fc703f-532b-4c53-955a-da0c62eeba6c" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX?xsd=xsd0" />
+    <MetadataFile FileName="MEX1.xsd" MetadataType="Schema" ID="399216e7-c4f1-467c-989a-1877d6a92b7f" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX?xsd=xsd2" />
+    <MetadataFile FileName="MEX2.xsd" MetadataType="Schema" ID="f7afa651-ffe8-44cf-9e76-ce19bfd5c214" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX?xsd=xsd1" />
+    <MetadataFile FileName="AnimalService.wsdl" MetadataType="Wsdl" ID="d71a4d1c-8bef-4f59-896b-951ea8718107" SourceId="1" SourceUrl="http://localhost:9876/AnimalService/MEX" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
