@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
 
 namespace AnimalService
 {
@@ -36,8 +38,14 @@ namespace AnimalService
         }
         [OperationContract]                
         public Animal Save(Animal animal, int id)
-        {
-            return _dbAnimal.Save(animal, id);
+        {            
+            try {
+                animal = _dbAnimal.Save(animal, id);                
+            }
+            catch (DbUpdateException exc) {
+                new FaultException<DbUpdateException>(exc);                                       
+            }
+            return animal;
         }
         [OperationContract]
         public IQueryable<Animal> Animals()

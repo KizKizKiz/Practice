@@ -123,9 +123,14 @@ namespace DataBinding.ViewModel
             {
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
-                    (obj) => {                        
-                        _animalService.Save(Animal, Animal.ID);                        
-                        _cachedAnimal = Serialize(Animal.GetType(), Animal);
+                    (obj) => {
+                        try {
+                            _animalService.Save(Animal, Animal.ID);
+                            _cachedAnimal = Serialize(Animal.GetType(), Animal);
+                        }
+                        catch (Exception e) {
+                            MessageBox.Show(e.Message);
+                        }                        
                     },
                     (obj) => true ));
             }

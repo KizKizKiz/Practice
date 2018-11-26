@@ -67,7 +67,7 @@ namespace Service.DAL
                 Context.SaveChanges();
             }
             catch (Exception exc) {
-                Console.WriteLine(exc.FullMessage());                          
+                throw new DbUpdateException("Cannot save, see inner exception", exc);
             }                                   
             return item;
         }
