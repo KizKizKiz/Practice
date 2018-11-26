@@ -27,9 +27,15 @@ namespace Service.DAL
         {
             if (!_cachedData.TryGetValue(id, out T element)) {
                 if (element == null) {
-                    element = LazyLoadTable().
+                    try {
+                        element = LazyLoadTable().
                               FirstOrDefault(elem => elem.ID == id);
-                    _cachedData.Add(id, element);
+                        _cachedData.Add(id, element);
+                    }
+                    catch (Exception e) {
+                        throw new ArgumentException($"Cannot find record with ID = {id}", e);
+                    }
+                    
                 }
             }
             return element;

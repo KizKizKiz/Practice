@@ -29,10 +29,8 @@ namespace AnimalService
             try {
                 animal = _dbAnimal.LoadById(id);
             }
-            catch (Exception e) {
-                throw new FaultException<ArgumentOutOfRangeException>(
-                    new ArgumentOutOfRangeException($"Cannot find record with ID = {id}", e),
-                    "");
+            catch (ArgumentException e) {
+                throw new FaultException<ArgumentException>(e);                   
             }
             return animal;
         }
