@@ -1,21 +1,19 @@
-﻿using System;
+﻿using DataBinding.AnimalService;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataBinding.View;
 using System.Windows;
-using DataBinding.Model;
-using DataBinding.Core;
-using DataBinding.Model.DAL;
-using System.Diagnostics;
-using DataBinding.Model.DAL.Context;
 
 namespace DataBinding.ViewModel
 {
-    class AnimalDetailViewModel : ViewModelBase
+    class AnimalDetailViewModel : ViewModelBase, IDataErrorInfo
     {
         private Window _detailView;
+        private AnimalServiceClient _animalService;
+        /// <summary>
+        /// Получает/задает окно детального отображения информации
+        /// </summary
         public Window DetailView
         {
             get { return _detailView; }
@@ -24,9 +22,10 @@ namespace DataBinding.ViewModel
                 _detailView = value;
                 _detailView.DataContext = this;
             }
-        }
-        private DBSquad _dbSquads;
-        private DBAnimal _dbAnimals;
+        }        
+        /// <summary>
+        /// Получает/задает имя животного
+        /// </summary>
         public string Name
         {
             get
@@ -55,15 +54,10 @@ namespace DataBinding.ViewModel
         /// <summary>
         /// Окно детального отображения данных
         /// </summary>
-        public AnimalDetailViewModel(Animal animal, DBAnimal context)
+        public AnimalDetailViewModel(Animal animal, AnimalServiceClient animalService)
         {
-            _dbSquads = new DBSquad(context.Context);
-            _dbAnimals = context;
-
-            Squads = _dbSquads.
-                LazyLoadTable().
-                Select(c => c.Type).
-                ToList();
+            _animalService = animalService;
+            Squads = animalService.Squads();
             Animal = animal;
             _cachedAnimal = Serialize(animal.GetType(), Animal);
             SelectedSquad = Animal.Squad;
@@ -99,12 +93,10 @@ namespace DataBinding.ViewModel
                     }
                 }
 
-                if (SelectedSquad != Animal.Squad) {
-                    _dbAnimals.Dettach(Animal);
-                    Animal = Serialize(type, Animal);
-                    _dbAnimals.Attach(Animal);
+                if (SelectedSquad != Animal.Squad) {                    
+                    Animal = Serialize(type, Animal);                    
                     Animal.Squad = SelectedSquad;
-                }                
+                }
             }
         }
         private Animal Serialize(Type type, Animal source)
@@ -122,6 +114,9 @@ namespace DataBinding.ViewModel
             return animal;
         }        
         private RelayCommand _saveToDb;
+        /// <summary>
+        /// Сохраняет изменения и кэширует сохраняемый объект
+        /// </summary>
         public RelayCommand Save
         {
             get
@@ -129,29 +124,35 @@ namespace DataBinding.ViewModel
                 return _saveToDb ??
                     (_saveToDb = new RelayCommand("Сохранить",
                     (obj) => {
-                        _dbAnimals.DiscriminatorUpdate(Animal);
-                        _dbAnimals.Save(Animal);                        
-                        _cachedAnimal = Serialize(Animal.GetType(), Animal);
+                        try {
+                            _animalService.Save(Animal, Animal.ID);
+                            _cachedAnimal = Serialize(Animal.GetType(), Animal);
+                        }
+                        catch (Exception e) {
+                            MessageBox.Show(e.Message);
+                        }                        
                     },
-                    (obj) => _dbAnimals.IsModified(Animal)));
+                    (obj) => true ));
             }
         }        
         private RelayCommand _cancel;
+        /// <summary>
+        /// Отменяет произведенный действия и приводит объект к изначальному состоянию
+        /// </summary>
         public RelayCommand Cancel
         {
             get
             {
                 return _cancel ??
                     (_cancel = new RelayCommand("Отмена",
-                    (obj) => {
-                        _dbAnimals.Dettach(Animal);
-                        _dbAnimals.Attach(_cachedAnimal);
-                        Name = _cachedAnimal.Name;
-                        Animal = _dbAnimals.Reload(_cachedAnimal);
-                        SelectedSquad = Animal.Squad;                                                
+                    (obj) => {                        
+                        Name = _cachedAnimal.Name;                        
+                        SelectedSquad = _cachedAnimal.Squad;                        
+                        Animal = _cachedAnimal;
+                        _cachedAnimal = Serialize(Animal.GetType(), Animal);
                         DetailView.Close();
                     },
-                    (obj) => _dbAnimals.IsModified(Animal)));
+                    (obj) =>true));
             }
         }
         private List<SQUAD> _squads;
@@ -197,6 +198,25 @@ namespace DataBinding.ViewModel
             set
             {
                 SetProperty(ref _hideSpider, value);
+            }
+        }
+
+        public string Error => throw new NotImplementedException();
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = string.Empty;
+                switch (columnName) {
+                    case "WingsArea": {
+                        if (string.IsNullOrWhiteSpace(Name)) {
+                            error = "Поле не должно быть пустым";
+                        }
+                        break;
+                    }
+                }
+                return error;
             }
         }
     }       

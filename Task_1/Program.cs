@@ -1,32 +1,24 @@
-﻿using System;
-using System.Configuration;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+﻿using CommonLib.Extensions;
+using System;
 using System.Linq;
-using Task_1.DAL.Context;
-using Task_1.Core;
-using System.Data.Entity.Core;
-
 namespace Task_1
 {
     class Program
     {                
         static void Main(string[] args)
-        {            
-            try 
-            {
-                DBAnimal essential = new DBAnimal();
-                foreach (var item in essential.Load()) {
-                    Console.WriteLine(item);
-                }
+        {
+            try {
+                AnimalService.AnimalServiceClient client = new AnimalService.AnimalServiceClient();
+                var animal = client.GetByIdFromCache(1);                
+                animal.Name = "Dro";                                   
+                client.Save(animal, animal.ID);                                
+                var an = client.Animals().FirstOrDefault();
+                Console.WriteLine(an.Name);
             }
             catch (Exception e) {
-                Console.WriteLine(e.StackTrace);
-            }
-                        
+                Console.WriteLine(e.FullMessage());
+            }                                    
             Console.ReadKey();
         }
-
     }
 }

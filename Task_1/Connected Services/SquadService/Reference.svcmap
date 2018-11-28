@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5a5f7764-3131-479c-a7f6-e092d54769ce" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:9876/SquadService/MEX" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MEX.xsd" MetadataType="Schema" ID="63f7f935-553e-44fa-a59b-b8019cff9645" SourceId="1" SourceUrl="http://localhost:9876/SquadService/MEX?xsd=xsd2" />
+    <MetadataFile FileName="MEX1.xsd" MetadataType="Schema" ID="d28c3467-0935-47d6-8284-ddf45d3b2c06" SourceId="1" SourceUrl="http://localhost:9876/SquadService/MEX?xsd=xsd3" />
+    <MetadataFile FileName="SquadService.wsdl" MetadataType="Wsdl" ID="58eb8a7f-500b-482c-bfe1-ab84d7be05bd" SourceId="1" SourceUrl="http://localhost:9876/SquadService/MEX" />
+    <MetadataFile FileName="MEX2.xsd" MetadataType="Schema" ID="570c4959-d5d7-4c4e-9178-f4c0f9e0b681" SourceId="1" SourceUrl="http://localhost:9876/SquadService/MEX?xsd=xsd0" />
+    <MetadataFile FileName="MEX3.xsd" MetadataType="Schema" ID="61c9e052-0dfd-4bcc-a2be-0ad264666fff" SourceId="1" SourceUrl="http://localhost:9876/SquadService/MEX?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
