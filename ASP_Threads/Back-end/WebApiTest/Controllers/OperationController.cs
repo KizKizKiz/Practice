@@ -18,19 +18,21 @@ namespace WebApiTest.Controllers
     public class OperationController : ControllerBase
     {
         public readonly ILogger<OperationController> Logger;
-        public OperationController(ILogger<OperationController> logger)
+        public readonly IConfiguration Configuration;
+        public OperationController(ILogger<OperationController> logger, IConfiguration configuration)
         {
             Logger = logger;
+            Configuration = configuration;
         }
         [HttpGet("operation")]
-        public async Task<int> LongOperation()
+        public async Task<string> LongOperation()
         {
             Logger.LogInformation($"{MethodBase.GetCurrentMethod().Name} Started");
             //Simulate long operation
             await Task.Delay(3000);
 
             var rnd = new Random();
-            return rnd.Next(1000);
+            return Configuration["dev"];
         }
         [HttpGet("init")]
         public async Task Initialize()
