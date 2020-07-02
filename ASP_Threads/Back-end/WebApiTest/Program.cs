@@ -20,6 +20,12 @@ namespace WebApiTest
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureAppConfiguration((context, builder) =>
+                    {
+                        var config = builder.Build();
+                        builder.AddDbSettings<SqlConnection>(config.GetConnectionString("ConnectionString"), 
+                            "select * from Settings");
+                    });
                     //Replaced on log4net
                     webBuilder.ConfigureLogging((l) => l.AddLog4Net("log4net.config"));
                     webBuilder.UseStartup<Startup>();

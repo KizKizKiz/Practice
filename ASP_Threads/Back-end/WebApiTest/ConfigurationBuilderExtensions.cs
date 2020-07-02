@@ -21,7 +21,7 @@ namespace WebApiTest
                 throw new ArgumentNullException(connection == null ? nameof(connection) : nameof(query));
 
             var dbSource = new DbSettingsSource<T>(connection, query);
-            builder.Add(dbSource);
+            builder.Sources.Insert(0, dbSource);
 
             return builder;
         }
@@ -38,7 +38,7 @@ namespace WebApiTest
             {
                 Optional = optional
             };
-            builder.Add(dbSource);
+            builder.Sources.Insert(0, dbSource);
 
             return builder;
         }
