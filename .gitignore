@@ -1,7 +1,6 @@
 # comment
 .vs/
-Task_1/bin
-Task_1/obj
-DataBinding/obj
-DataBinding/bin/
+bin
 *.csproj.user
+obj
+*.txt
